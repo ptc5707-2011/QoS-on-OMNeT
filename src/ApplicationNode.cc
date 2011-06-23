@@ -20,6 +20,7 @@ Define_Module(ApplicationNode);
 void ApplicationNode::initialize()
 {
 	QoSMessage *msg = new QoSMessage("Application message");
+	msg->setByteLength(1000000000);
 	msg->setFrom(par("from"));
 	msg->setTo(par("to"));
 	send(msg, "out1");

@@ -19,12 +19,24 @@ Define_Module(BufferedRouter);
 
 void BufferedRouter::initialize()
 {
-    // TODO - Generated method body
+	endTxMsg = new cMessage("Transmission ended, ready to transmit.");
 }
 
 void BufferedRouter::handleMessage(cMessage *msg)
 {
-	EV << "Received message, sending it through out1";
-	send(msg, "out1");
 
+	if(msg == endTxMsg) {
+		if(!queue.isEmpty()) {
+			send((cMessage *)queue.pop(), "out1");
+		}
+	} else {
+		cChannel *txChannel = gate("out1")->getTransmissionChannel();
+		simtime_t txFinishTime = txChannel->getTransmissionFinishTime();
+		if(txFinishTime <= simTime()) {
+			send(msg, "out1");
+		} else {
+			queue.insert(msg);
+			scheduleAt(txFinishTime, endTxMsg);
+		}
+	}
 }

@@ -20,6 +20,7 @@ Define_Module(InterfenceNode);
 void InterfenceNode::initialize()
 {
 	QoSMessage *msg = new QoSMessage("Interference message");
+	msg->setByteLength(10000);
 	msg->setFrom(par("from"));
 	msg->setTo(par("to"));
 	send(msg, "out1");
