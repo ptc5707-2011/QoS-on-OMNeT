@@ -13,13 +13,16 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package qos;
+#include "Receiver.h"
 
-//
-// TODO auto-generated module
-//
-simple Receiver
+Define_Module(Receiver);
+
+void Receiver::initialize()
 {
-    gates:
-        input in1;
+    // TODO - Generated method body
+}
+
+void Receiver::handleMessage(cMessage *msg)
+{
+	delete(msg);
 }

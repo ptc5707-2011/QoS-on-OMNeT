@@ -13,13 +13,19 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package qos;
+#include "InterfenceNode.h"
 
-//
-// TODO auto-generated module
-//
-simple Receiver
+Define_Module(InterfenceNode);
+
+void InterfenceNode::initialize()
 {
-    gates:
-        input in1;
+	QoSMessage *msg = new QoSMessage("Interference message");
+	msg->setFrom(par("from"));
+	msg->setTo(par("to"));
+	send(msg, "out1");
+}
+
+void InterfenceNode::handleMessage(cMessage *msg)
+{
+
 }

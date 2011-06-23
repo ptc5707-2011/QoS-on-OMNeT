@@ -13,13 +13,20 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package qos;
+#ifndef __QOS_IDEALROUTER_H_
+#define __QOS_IDEALROUTER_H_
 
-//
-// TODO auto-generated module
-//
-simple Receiver
+#include <omnetpp.h>
+#include "QoSMessage_m.h"
+
+/**
+ * TODO - Generated class
+ */
+class IdealRouter : public cSimpleModule
 {
-    gates:
-        input in1;
-}
+  protected:
+    virtual void initialize();
+    virtual void handleMessage(cMessage *msg);
+};
+
+#endif

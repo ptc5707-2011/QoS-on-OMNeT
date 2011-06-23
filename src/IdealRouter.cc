@@ -13,13 +13,26 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package qos;
+#include "IdealRouter.h"
 
-module Router
+Define_Module(IdealRouter);
+
+void IdealRouter::initialize()
 {
-    gates:
-        input in_port[];
-        output out_port[];
-        
-    
+    // TODO - Generated method body
+}
+
+
+
+void IdealRouter::handleMessage(cMessage *msg)
+{
+
+	if(msg->isPacket()) {
+		if(strcmp(((QoSMessage *)msg)->getTo(), "R1") == 0) {
+			send(msg, "out1");
+		} else if(strcmp(((QoSMessage *)msg)->getTo(), "R2") == 0) {
+			send(msg, "out2");
+		}
+	}
+
 }

@@ -28,10 +28,18 @@ PROJECTRELATIVE_PATH = src
 O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc and .msg files
-OBJS =
+OBJS = \
+    $O/ApplicationNode.o \
+    $O/BufferedRouter.o \
+    $O/IdealRouter.o \
+    $O/InterfenceNode.o \
+    $O/Receiver.o \
+    $O/SinkApp.o \
+    $O/QoSMessage_m.o
 
 # Message files
-MSGFILES =
+MSGFILES = \
+    QoSMessage.msg
 
 #------------------------------------------------------------------------------
 
@@ -101,4 +109,22 @@ depend:
 	$(MAKEDEPEND) $(INCLUDE_PATH) -f Makefile -P\$$O/ -- $(MSG_CC_FILES)  ./*.cc
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
+$O/BufferedRouter.o: BufferedRouter.cc \
+	QoSMessage_m.h \
+	BufferedRouter.h
+$O/IdealRouter.o: IdealRouter.cc \
+	IdealRouter.h \
+	QoSMessage_m.h
+$O/Receiver.o: Receiver.cc \
+	Receiver.h
+$O/QoSMessage_m.o: QoSMessage_m.cc \
+	QoSMessage_m.h
+$O/InterfenceNode.o: InterfenceNode.cc \
+	InterfenceNode.h \
+	QoSMessage_m.h
+$O/ApplicationNode.o: ApplicationNode.cc \
+	ApplicationNode.h \
+	QoSMessage_m.h
+$O/SinkApp.o: SinkApp.cc \
+	SinkApp.h
 

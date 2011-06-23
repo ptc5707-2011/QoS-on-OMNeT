@@ -13,10 +13,10 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package qos;
-
-module Transmitter
-{
-    gates:
-        output out;
+//
+// TODO generated message class
+//
+packet QoSMessage {
+    string from;
+    string to;
 }

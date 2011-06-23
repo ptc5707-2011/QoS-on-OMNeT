@@ -15,38 +15,46 @@
 
 package qos;
 
+import ned.DelayChannel;
+import ned.DatarateChannel;
+import ned.IdealChannel;
+
+
 network Network
 {
-    @display("bgb=581,401");
+    parameters:
+    @display("bgb=901,567");
+    double link_delay @unit(s)= default(100ms);
+    double link_datarate @unit(bps)= default(100Mbps);
+    
     submodules:
-        R2: Receiver {
-            @display("p=469,303;i=device/laptop");
+        ROU1: BufferedRouter {
+            @display("p=179,216");
+        }
+        ROU2: IdealRouter {
+            @display("p=533,216");
+        }
+        T1: ApplicationNode {
+            @display("p=72,65");
+            from = "T1";
+            to = "R1";
+        }
+        T2: InterfenceNode {
+            @display("p=72,365");
+            from = "T2";
+            to = "R2";
         }
         R1: Receiver {
-            @display("p=469,77;i=device/laptop");
+            @display("p=639,88;i=device/laptop");
         }
-        T1: Transmitter {
-            @display("p=58,77;i=device/pc2");
+        R2: Receiver {
+            @display("p=639,365;i=block/network2");
         }
-        T2: Transmitter {
-            @display("p=58,303;i=device/pc2");
-        }
-        ROU2: Router {
-            @display("p=358,196;i=abstract/router");
-        }
-        ROU1: Router {
-            @display("p=193,196;i=abstract/router");
-        }
-
-
-
     connections:
 
-        T1.out --> Link --> ROU1.in_port++;
-        T2.out --> Link --> ROU1.in_port++;
-        ROU1.out_port++ --> Link --> ROU2.in_port++;
-        ROU2.out_port++ --> R1.in;
-        ROU2.out_port++ --> R2.in;
-
-
+        T1.out1 --> IdealChannel --> ROU1.in1;
+        T2.out1 --> IdealChannel --> ROU1.in2;
+        ROU2.out1 --> IdealChannel --> R1.in1;
+        ROU2.out2 --> IdealChannel --> R2.in1;
+        ROU1.out1 --> DatarateChannel  { delay=link_delay; datarate=link_datarate; } --> ROU2.in1;
 }

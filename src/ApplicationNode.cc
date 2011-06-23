@@ -13,13 +13,19 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package qos;
+#include "ApplicationNode.h"
 
-//
-// TODO auto-generated module
-//
-simple Receiver
+Define_Module(ApplicationNode);
+
+void ApplicationNode::initialize()
 {
-    gates:
-        input in1;
+	QoSMessage *msg = new QoSMessage("Application message");
+	msg->setFrom(par("from"));
+	msg->setTo(par("to"));
+	send(msg, "out1");
+}
+
+void ApplicationNode::handleMessage(cMessage *msg)
+{
+    // TODO - Generated method body
 }

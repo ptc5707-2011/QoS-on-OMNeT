@@ -13,13 +13,18 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package qos;
+#include "BufferedRouter.h"
 
-//
-// TODO auto-generated module
-//
-simple Receiver
+Define_Module(BufferedRouter);
+
+void BufferedRouter::initialize()
 {
-    gates:
-        input in1;
+    // TODO - Generated method body
+}
+
+void BufferedRouter::handleMessage(cMessage *msg)
+{
+	EV << "Received message, sending it through out1";
+	send(msg, "out1");
+
 }

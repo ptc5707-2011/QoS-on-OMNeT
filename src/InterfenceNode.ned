@@ -18,8 +18,13 @@ package qos;
 //
 // TODO auto-generated module
 //
-simple Receiver
+simple InterfenceNode
 {
+    parameters:
+        string from;
+        string to;
+
+        @display("i=block/network");
     gates:
-        input in1;
+        output out1;
 }

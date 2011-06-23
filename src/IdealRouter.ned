@@ -18,8 +18,11 @@ package qos;
 //
 // TODO auto-generated module
 //
-simple Receiver
+simple IdealRouter
 {
+    @display("i=abstract/router,green");
     gates:
         input in1;
+        output out1;
+        output out2;
 }

@@ -13,13 +13,16 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package qos;
+#include "SinkApp.h"
 
-//
-// TODO auto-generated module
-//
-simple Receiver
+Define_Module(SinkApp);
+
+void SinkApp::initialize()
 {
-    gates:
-        input in1;
+    // Do nothing
+}
+
+void SinkApp::handleMessage(cMessage *msg)
+{
+	delete msg;
 }

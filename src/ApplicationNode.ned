@@ -18,8 +18,14 @@ package qos;
 //
 // TODO auto-generated module
 //
-simple Receiver
+simple ApplicationNode
 {
+    parameters:
+        string from;
+        string to;
+
+        @display("i=device/pc2");
     gates:
-        input in1;
+        output out1;
+
 }

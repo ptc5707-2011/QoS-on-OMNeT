@@ -18,8 +18,11 @@ package qos;
 //
 // TODO auto-generated module
 //
-simple Receiver
+simple BufferedRouter
 {
+    @display("i=abstract/router");
     gates:
         input in1;
+        input in2;
+        output out1;
 }

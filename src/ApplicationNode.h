@@ -13,16 +13,20 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package qos;
-//
-// TODO documentation
-//
-// @author hugo
-//
-channel Link
-{
-    parameters:
-        
-        
-}
+#ifndef __QOS_APPLICATIONNODE_H_
+#define __QOS_APPLICATIONNODE_H_
 
+#include <omnetpp.h>
+#include "QoSMessage_m.h"
+
+/**
+ * TODO - Generated class
+ */
+class ApplicationNode : public cSimpleModule
+{
+  protected:
+    virtual void initialize();
+    virtual void handleMessage(cMessage *msg);
+};
+
+#endif
