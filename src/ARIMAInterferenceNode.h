@@ -13,8 +13,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef __QOS_INTERFENCENODE_H_
-#define __QOS_INTERFENCENODE_H_
+#ifndef __QOS_ARIMAINTERFERENCENODE_H_
+#define __QOS_ARIMAINTERFERENCENODE_H_
 
 #include <omnetpp.h>
 #include "QoSMessage_m.h"
@@ -22,12 +22,11 @@
 /**
  * TODO - Generated class
  */
-class InterfenceNode : public cSimpleModule
+class ARIMAInterferenceNode : public cSimpleModule
 {
-
-	protected:
-		virtual void initialize();
-		virtual void handleMessage(cMessage *msg);
+  protected:
+    virtual void initialize();
+    virtual void handleMessage(cMessage *msg);
 };
 
 #endif

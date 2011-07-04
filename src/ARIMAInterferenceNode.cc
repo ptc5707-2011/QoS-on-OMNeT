@@ -13,21 +13,16 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#include "InterfenceNode.h"
+#include "ARIMAInterferenceNode.h"
 
-Define_Module(InterfenceNode);
+Define_Module(ARIMAInterferenceNode);
 
-void InterfenceNode::initialize()
+void ARIMAInterferenceNode::initialize()
 {
-	scheduleAt(simTime()+par("timeBetweenPackets"), new cMessage);
+    send(new cMessage("BLA"), "out1");
 }
 
-void InterfenceNode::handleMessage(cMessage *msg)
+void ARIMAInterferenceNode::handleMessage(cMessage *msg)
 {
-	QoSMessage *pkt = new QoSMessage("Interference message");
-	pkt->setByteLength(par("packetLength").longValue());
-	pkt->setFrom(par("from"));
-	pkt->setTo(par("to"));
-	send(pkt, "out1");
-	scheduleAt(simTime()+par("timeBetweenPackets"), msg);
+    // TODO - Generated method body
 }

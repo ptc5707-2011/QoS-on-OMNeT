@@ -28,6 +28,7 @@ network Network
     double link_datarate @unit(bps)= default(100Mbps);
     
     string applicationNodeType;
+    string interferenceNodeType;
     
     submodules:
         ROU1: BufferedRouter {
@@ -41,7 +42,7 @@ network Network
             from = "T1";
             to = "R1";
         }
-        T2: InterfenceNode {
+        T2: <interferenceNodeType> like InterferenceNode {
             @display("p=72,365");
             from = "T2";
             to = "R2";
