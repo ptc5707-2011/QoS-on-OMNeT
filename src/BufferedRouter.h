@@ -28,6 +28,9 @@ class BufferedRouter : public cSimpleModule
 	private:
 		cQueue queue;
 		cMessage *next;
+		bool isFinite;
+		long bufferSize;
+		int bufferedSize;
 
 	protected:
 		virtual void initialize();

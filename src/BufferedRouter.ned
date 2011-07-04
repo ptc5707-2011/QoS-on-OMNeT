@@ -20,7 +20,10 @@ package qos;
 //
 simple BufferedRouter
 {
-    @display("i=abstract/router");
+    parameters:
+        bool isFinite = default(true);
+        int bufferSize @unit(byte) = default(1MB);
+        @display("i=abstract/router");
     gates:
         input in1;
         input in2;

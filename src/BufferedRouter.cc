@@ -20,6 +20,13 @@ Define_Module(BufferedRouter);
 void BufferedRouter::initialize()
 {
 	next = new cMessage("Next");
+	isFinite = par("isFinite").boolValue();
+	bufferSize = par("bufferSize").longValue();
+	bufferedSize = 0;
+
+	EV << "Buffer size: " << bufferSize << "\n";
+	EV << "Is finite? " << isFinite << "\n";
+	EV << "Buffered size: " << bufferedSize << "\n";
 }
 
 void BufferedRouter::handleMessage(cMessage *msg)
@@ -37,7 +44,26 @@ void BufferedRouter::handleMessage(cMessage *msg)
 		}
 		//Se o canal n‹o est‡ livre
 		else {
-			queue.insert(msg);
+			if(isFinite) {
+				//Obter o tamanho da mensagem.
+				long messageLength = ((QoSMessage *)msg)->getByteLength();
+				//Se a mensagem for maior que o buffer dispon’vel
+				if(messageLength+bufferedSize > bufferSize) {
+					EV << "Message dropped:" << msg->getName();
+					delete(msg);
+				}
+				//Se a mensagem couber no buffer dispon’vel
+				else {
+					//Atualizar o contador de buffer
+					bufferedSize = bufferedSize + messageLength;
+					//Armazenar a mensagem no buffer
+					queue.insert(msg);
+				}
+			}
+			else {
+				//Armazenar a mensagem no buffer
+				queue.insert(msg);
+			}
 		}
 	}
 	//Se Ž uma mensagem interna
@@ -46,6 +72,15 @@ void BufferedRouter::handleMessage(cMessage *msg)
 		if(!queue.isEmpty()) {
 			//Retira a mensagem da fila (FIFO)
 			QoSMessage *QoSMessageToSend = (QoSMessage *)queue.pop();
+
+			//Se o buffer Ž finito
+			if(isFinite) {
+				//Obter o tamanho da mensagem
+				long messageLength = ((QoSMessage *)msg)->getByteLength();
+				//Atualizar o contador de buffer
+				bufferedSize = bufferedSize - messageLength;
+			}
+
 			//Envia a mensagem
 			send(QoSMessageToSend, outGate);
 			//Agenda o pr—ximo envio para o instante que o envio atual terminar
