@@ -13,20 +13,19 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#include "ApplicationNode.h"
+package qos;
 
-Define_Module(ApplicationNode);
-
-void ApplicationNode::initialize()
+//
+// TODO auto-generated module
+//
+simple CBRApplicationNode like ApplicationNode
 {
-	QoSMessage *msg = new QoSMessage("Application message");
-	msg->setByteLength(1000000000);
-	msg->setFrom(par("from"));
-	msg->setTo(par("to"));
-	send(msg, "out1");
-}
+    parameters:
+        string from;
+        string to;
+        int bytesPerPacket @unit(B) = default(64B);
+        double timeBetweenPackets @unit(s) = default(100ms);
 
-void ApplicationNode::handleMessage(cMessage *msg)
-{
-    // TODO - Generated method body
+    gates:
+        output out1;   
 }

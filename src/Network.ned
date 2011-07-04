@@ -27,6 +27,8 @@ network Network
     double link_delay @unit(s)= default(100ms);
     double link_datarate @unit(bps)= default(100Mbps);
     
+    string applicationNodeType;
+    
     submodules:
         ROU1: BufferedRouter {
             @display("p=179,216");
@@ -34,7 +36,7 @@ network Network
         ROU2: IdealRouter {
             @display("p=533,216");
         }
-        T1: ApplicationNode {
+        T1: <applicationNodeType> like ApplicationNode {
             @display("p=72,65");
             from = "T1";
             to = "R1";

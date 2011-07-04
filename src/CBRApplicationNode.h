@@ -13,17 +13,23 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef __QOS_APPLICATIONNODE_H_
-#define __QOS_APPLICATIONNODE_H_
+#ifndef __QOS_CBRAPPLICATIONNODE_H_
+#define __QOS_CBRAPPLICATIONNODE_H_
 
 #include <omnetpp.h>
 #include "QoSMessage_m.h"
 
+
 /**
  * TODO - Generated class
  */
-class ApplicationNode : public cSimpleModule
+class CBRApplicationNode : public cSimpleModule
 {
+  private:
+	cMessage *next;
+	long bytesPerPacket;
+    double timeBetweenPackets;
+
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);

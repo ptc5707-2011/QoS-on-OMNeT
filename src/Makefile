@@ -29,8 +29,8 @@ O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc and .msg files
 OBJS = \
-    $O/ApplicationNode.o \
     $O/BufferedRouter.o \
+    $O/CBRApplicationNode.o \
     $O/IdealRouter.o \
     $O/InterfenceNode.o \
     $O/Receiver.o \
@@ -108,22 +108,20 @@ depend:
 	$(MAKEDEPEND) $(INCLUDE_PATH) -f Makefile -P\$$O/ -- $(MSG_CC_FILES)  ./*.cc
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
-$O/BufferedRouter.o: BufferedRouter.cc \
-	QoSMessage_m.h \
-	BufferedRouter.h
-$O/IdealRouter.o: IdealRouter.cc \
-	IdealRouter.h \
-	QoSMessage_m.h
-$O/Receiver.o: Receiver.cc \
-	Receiver.h
 $O/QoSMessage_m.o: QoSMessage_m.cc \
 	QoSMessage_m.h
 $O/InterfenceNode.o: InterfenceNode.cc \
 	InterfenceNode.h \
 	QoSMessage_m.h
-$O/ApplicationNode.o: ApplicationNode.cc \
-	ApplicationNode.h \
+$O/BufferedRouter.o: BufferedRouter.cc \
+	QoSMessage_m.h \
+	BufferedRouter.h
+$O/CBRApplicationNode.o: CBRApplicationNode.cc \
+	CBRApplicationNode.h \
 	QoSMessage_m.h
-$O/SinkApp.o: SinkApp.cc \
-	SinkApp.h
+$O/IdealRouter.o: IdealRouter.cc \
+	IdealRouter.h \
+	QoSMessage_m.h
+$O/Receiver.o: Receiver.cc \
+	Receiver.h
 

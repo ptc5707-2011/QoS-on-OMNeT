@@ -13,14 +13,22 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package qos;
+#include "CBRApplicationNode.h"
 
-moduleinterface ApplicationNode
+Define_Module(CBRApplicationNode);
+
+void CBRApplicationNode::initialize()
 {
-    parameters:
-        string from;
-        string to;
+	bytesPerPacket = par("bytesPerPacket").longValue();
+	timeBetweenPackets = par("timeBetweenPackets").doubleValue();
 
-    gates:
-        output out1;   
+	next = new cMessage("Next");
+	scheduleAt(simTime(), next);
+}
+
+void CBRApplicationNode::handleMessage(cMessage *msg)
+{
+	QoSMessage *pkt = new QoSMessage("CBR Message");
+	send(pkt, "out1");
+	scheduleAt(simTime()+timeBetweenPackets, next);
 }
