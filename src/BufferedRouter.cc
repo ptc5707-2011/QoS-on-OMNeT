@@ -19,24 +19,37 @@ Define_Module(BufferedRouter);
 
 void BufferedRouter::initialize()
 {
-	endTxMsg = new cMessage("Transmission ended, ready to transmit.");
+	next = new cMessage("Next");
 }
 
 void BufferedRouter::handleMessage(cMessage *msg)
 {
-
-	if(msg == endTxMsg) {
-		if(!queue.isEmpty()) {
-			send((cMessage *)queue.pop(), "out1");
+	cGate *outGate = gate("out1");
+	cChannel *txChannel = outGate->getChannel();
+	//Se Ž um pacote
+	if(msg->isPacket()) {
+		//Se o canal est‡ livre
+		if(!txChannel->isBusy()) {
+			//Envia a mensagem
+			send(msg, outGate);
+			//Agenda o pr—ximo envio para o instante que o envio atual terminar
+			scheduleAt(simTime()+txChannel->calculateDuration(msg), next);
 		}
-	} else {
-		cChannel *txChannel = gate("out1")->getTransmissionChannel();
-		simtime_t txFinishTime = txChannel->getTransmissionFinishTime();
-		if(txFinishTime <= simTime()) {
-			send(msg, "out1");
-		} else {
+		//Se o canal n‹o est‡ livre
+		else {
 			queue.insert(msg);
-			scheduleAt(txFinishTime, endTxMsg);
+		}
+	}
+	//Se Ž uma mensagem interna
+	else{
+		//Se h‡ alguma mensagem na fila
+		if(!queue.isEmpty()) {
+			//Retira a mensagem da fila (FIFO)
+			QoSMessage *QoSMessageToSend = (QoSMessage *)queue.pop();
+			//Envia a mensagem
+			send(QoSMessageToSend, outGate);
+			//Agenda o pr—ximo envio para o instante que o envio atual terminar
+			scheduleAt(simTime()+txChannel->calculateDuration(QoSMessageToSend), next);
 		}
 	}
 }

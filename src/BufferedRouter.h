@@ -27,7 +27,7 @@ class BufferedRouter : public cSimpleModule
 
 	private:
 		cQueue queue;
-		cMessage *endTxMsg;
+		cMessage *next;
 
 	protected:
 		virtual void initialize();
