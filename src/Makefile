@@ -34,7 +34,6 @@ OBJS = \
     $O/IdealRouter.o \
     $O/InterfenceNode.o \
     $O/Receiver.o \
-    $O/SinkApp.o \
     $O/QoSMessage_m.o
 
 # Message files
