@@ -19,7 +19,6 @@ Define_Module(IdealRouter);
 
 void IdealRouter::initialize()
 {
-    // TODO - Generated method body
 }
 
 
