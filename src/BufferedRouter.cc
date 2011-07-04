@@ -33,26 +33,26 @@ void BufferedRouter::handleMessage(cMessage *msg)
 {
 	cGate *outGate = gate("out1");
 	cChannel *txChannel = outGate->getChannel();
-	//Se Ž um pacote
+	//Se Ã© um pacote
 	if(msg->isPacket()) {
-		//Se o canal est‡ livre
+		//Se o canal estÃ¡ livre
 		if(!txChannel->isBusy()) {
 			//Envia a mensagem
 			send(msg, outGate);
-			//Agenda o pr—ximo envio para o instante que o envio atual terminar
+			//Agenda o prÃ³ximo envio para o instante que o envio atual terminar
 			scheduleAt(simTime()+txChannel->calculateDuration(msg), next);
 		}
-		//Se o canal n‹o est‡ livre
+		//Se o canal nÃ£o estÃ¡ livre
 		else {
 			if(isFinite) {
 				//Obter o tamanho da mensagem.
 				long messageLength = ((QoSMessage *)msg)->getByteLength();
-				//Se a mensagem for maior que o buffer dispon’vel
+				//Se a mensagem for maior que o buffer disponÃ­vel
 				if(messageLength+bufferedSize > bufferSize) {
 					EV << "Message dropped:" << msg->getName();
 					delete(msg);
 				}
-				//Se a mensagem couber no buffer dispon’vel
+				//Se a mensagem couber no buffer disponÃ­vel
 				else {
 					//Atualizar o contador de buffer
 					bufferedSize = bufferedSize + messageLength;
@@ -66,14 +66,14 @@ void BufferedRouter::handleMessage(cMessage *msg)
 			}
 		}
 	}
-	//Se Ž uma mensagem interna
+	//Se Ã© uma mensagem interna
 	else{
-		//Se h‡ alguma mensagem na fila
+		//Se hÃ¡ alguma mensagem na fila
 		if(!queue.isEmpty()) {
 			//Retira a mensagem da fila (FIFO)
 			QoSMessage *QoSMessageToSend = (QoSMessage *)queue.pop();
 
-			//Se o buffer Ž finito
+			//Se o buffer Ã© finito
 			if(isFinite) {
 				//Obter o tamanho da mensagem
 				long messageLength = ((QoSMessage *)msg)->getByteLength();
@@ -83,7 +83,7 @@ void BufferedRouter::handleMessage(cMessage *msg)
 
 			//Envia a mensagem
 			send(QoSMessageToSend, outGate);
-			//Agenda o pr—ximo envio para o instante que o envio atual terminar
+			//Agenda o prÃ³ximo envio para o instante que o envio atual terminar
 			scheduleAt(simTime()+txChannel->calculateDuration(QoSMessageToSend), next);
 		}
 	}
