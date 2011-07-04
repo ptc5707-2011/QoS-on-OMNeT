@@ -23,8 +23,12 @@ simple InterfenceNode
     parameters:
         string from;
         string to;
+        volatile double timeBetweenPackets @unit(s) = default(exponential(10s));
+        volatile int packetLength @unit(byte) = default(10240000B);
+        
 
         @display("i=block/network");
     gates:
         output out1;
+    
 }

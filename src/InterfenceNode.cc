@@ -19,14 +19,15 @@ Define_Module(InterfenceNode);
 
 void InterfenceNode::initialize()
 {
-	QoSMessage *msg = new QoSMessage("Interference message");
-	msg->setByteLength(10000);
-	msg->setFrom(par("from"));
-	msg->setTo(par("to"));
-	send(msg, "out1");
+	scheduleAt(simTime()+par("timeBetweenPackets"), new cMessage);
 }
 
 void InterfenceNode::handleMessage(cMessage *msg)
 {
-
+	QoSMessage *pkt = new QoSMessage("Interference message");
+	pkt->setByteLength(par("packetLength").longValue());
+	pkt->setFrom(par("from"));
+	pkt->setTo(par("to"));
+	send(pkt, "out1");
+	scheduleAt(simTime()+par("timeBetweenPackets"), msg);
 }

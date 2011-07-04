@@ -24,9 +24,10 @@
  */
 class InterfenceNode : public cSimpleModule
 {
-  protected:
-    virtual void initialize();
-    virtual void handleMessage(cMessage *msg);
+
+	protected:
+		virtual void initialize();
+		virtual void handleMessage(cMessage *msg);
 };
 
 #endif
