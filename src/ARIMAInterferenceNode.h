@@ -24,9 +24,19 @@
  */
 class ARIMAInterferenceNode : public cSimpleModule
 {
-  protected:
-    virtual void initialize();
-    virtual void handleMessage(cMessage *msg);
+
+	private:
+		int p, q, d;
+		std::vector<double> phi;
+		std::vector<double> rho;
+		std::vector<double> yt;
+		std::vector<double> xt;
+		std::vector<double> wt;
+
+	protected:
+		virtual void initialize();
+		virtual void handleMessage(cMessage *msg);
+		double getPacket();
 };
 
 #endif

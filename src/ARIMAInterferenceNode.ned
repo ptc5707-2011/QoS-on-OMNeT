@@ -23,6 +23,9 @@ simple ARIMAInterferenceNode like InterferenceNode
     parameters:
         string from;
         string to;
+        string rho_params;
+        string phi_params;
+        int d;
 
     gates:
         output out1;  

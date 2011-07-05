@@ -17,12 +17,73 @@
 
 Define_Module(ARIMAInterferenceNode);
 
+
+double ARIMAInterferenceNode::getPacket()
+{
+
+	double new_yt = 0.0;
+
+	//Cálculo da parcela AR
+	for(unsigned int i = 0; i < phi.size(); i++) {
+		new_yt += phi[i]*yt[i];
+	}
+
+	//Cálculo da parcela MA
+	for(unsigned int i = 0; i < rho.size(); i++) {
+		new_yt -= rho[i]*wt[i];
+	}
+	double inov = dblrand();
+	new_yt += inov;
+
+	//Atualização dos vetores de estado
+	wt.insert(wt.begin(), inov);
+	wt.erase(wt.end()-1);
+
+	yt.insert(yt.begin(), new_yt);
+	yt.erase(yt.end()-1);
+
+	return new_yt;
+
+}
+
 void ARIMAInterferenceNode::initialize()
 {
-    send(new cMessage("BLA"), "out1");
+	//Obter os parâmetros
+	const char *rho_string = par("rho_params").stringValue();
+	const char *phi_string = par("phi_params").stringValue();
+	phi = cStringTokenizer(rho_string).asDoubleVector();
+	rho = cStringTokenizer(phi_string).asDoubleVector();
+	p = phi.size();
+	q = rho.size();
+	d = par("d").longValue();
+
+	EV << "Phi: ";
+	for(unsigned int i = 0; i < phi.size(); i++) {
+		EV << phi[i] << " ";
+	}
+	EV << "\n";
+
+	EV << "Rho: ";
+	for(unsigned int i = 0; i < rho.size(); i++) {
+		EV << rho[i] << " ";
+	}
+	EV << "\n";
+
+	//Alocação inicial
+	yt.resize(p,0);
+	wt.resize(q,0);
+
+	//Preenchimento com números aleatórios.
+	for(unsigned int i = 0; i< wt.size(); i++) {
+		wt[i] = dblrand();
+	}
+
+
 }
+
+
 
 void ARIMAInterferenceNode::handleMessage(cMessage *msg)
 {
-    // TODO - Generated method body
+
 }
