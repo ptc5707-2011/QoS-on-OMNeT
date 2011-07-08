@@ -30,10 +30,10 @@ O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 # Object files for local .cc and .msg files
 OBJS = \
     $O/ARIMAInterferenceNode.o \
-    $O/BufferedRouter.o \
     $O/CBRApplicationNode.o \
     $O/IdealRouter.o \
     $O/Receiver.o \
+    $O/BufferedRouter.o \
     $O/QoSMessage_m.o
 
 # Message files

@@ -29,6 +29,9 @@ void CBRApplicationNode::initialize()
 void CBRApplicationNode::handleMessage(cMessage *msg)
 {
 	QoSMessage *pkt = new QoSMessage("CBR Message");
+	pkt->setFrom("T1");
+	pkt->setTo("R1");
+	pkt->setByteLength(bytesPerPacket);
 	send(pkt, "out1");
 	scheduleAt(simTime()+timeBetweenPackets, next);
 }
