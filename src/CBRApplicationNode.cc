@@ -41,8 +41,11 @@ void CBRApplicationNode::handleMessage(cMessage *msg)
 	std::stringstream messageName;
 	messageName << "CBR message, seq: " << seqcounter;
 	pkt->setName(messageName.str().c_str());
-
 	EV << "T1 criou mensagem '"<< pkt->getName() <<"'";
+
+	simsignal_t lengthSignalID = registerSignal("length");
+	emit(lengthSignalID, (long)pkt->getByteLength());
+
 	send(pkt, "out1");
 	scheduleAt(simTime()+timeBetweenPackets, next);
 }
