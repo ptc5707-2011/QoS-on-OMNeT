@@ -21,6 +21,7 @@
  * packet QoSMessage {
  *     string from;
  *     string to;
+ *     unsigned long seqCount;
  * }
  * </pre>
  */
@@ -29,6 +30,7 @@ class QoSMessage : public ::cPacket
   protected:
     opp_string from_var;
     opp_string to_var;
+    unsigned long seqCount_var;
 
     // protected and unimplemented operator==(), to prevent accidental usage
     bool operator==(const QoSMessage&);
@@ -47,6 +49,8 @@ class QoSMessage : public ::cPacket
     virtual void setFrom(const char * from_var);
     virtual const char * getTo() const;
     virtual void setTo(const char * to_var);
+    virtual unsigned long getSeqCount() const;
+    virtual void setSeqCount(unsigned long seqCount_var);
 };
 
 inline void doPacking(cCommBuffer *b, QoSMessage& obj) {obj.parsimPack(b);}

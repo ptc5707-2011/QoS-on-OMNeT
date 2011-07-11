@@ -11,7 +11,6 @@
 // 
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program.  If not, see http://www.gnu.org/licenses/.
-// EU MUDEI ESTE ARQUIVO!!!
 #include "BufferedRouter.h"
 
 Define_Module(BufferedRouter);
@@ -37,6 +36,7 @@ void BufferedRouter::handleMessage(cMessage *msg)
 		//Se o canal está livre
 		if(!txChannel->isBusy()) {
 			//Envia a mensagem
+			EV << "ROU1 encaminha mensagem imediatamente '"<< msg->getName() <<"'";
 			send(msg, outGate);
 			//Agenda o próximo envio para o instante que o envio atual terminar
 			scheduleAt(simTime()+txChannel->calculateDuration(msg), next);
@@ -48,7 +48,7 @@ void BufferedRouter::handleMessage(cMessage *msg)
 				long messageLength = ((QoSMessage *)msg)->getByteLength();
 				//Se a mensagem for maior que o buffer disponível
 				if(messageLength+bufferedSize > bufferSize) {
-					EV << "Message dropped:" << msg->getName();
+					EV << "Mensagem descartada em ROU1:" << msg->getName();
 					delete(msg);
 				}
 				//Se a mensagem couber no buffer disponível
@@ -81,6 +81,7 @@ void BufferedRouter::handleMessage(cMessage *msg)
 			}
 
 			//Envia a mensagem
+			EV << "ROU1 encaminha mensagem retirada do buffer '"<< msg->getName() <<"'";
 			send(QoSMessageToSend, outGate);
 			//Agenda o próximo envio para o instante que o envio atual terminar
 			scheduleAt(simTime()+txChannel->calculateDuration(QoSMessageToSend), next);
