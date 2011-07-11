@@ -36,6 +36,7 @@ QoSMessage::QoSMessage(const char *name, int kind) : cPacket(name,kind)
 {
     this->from_var = 0;
     this->to_var = 0;
+    this->seqCount_var = 0;
 }
 
 QoSMessage::QoSMessage(const QoSMessage& other) : cPacket()
@@ -54,6 +55,7 @@ QoSMessage& QoSMessage::operator=(const QoSMessage& other)
     cPacket::operator=(other);
     this->from_var = other.from_var;
     this->to_var = other.to_var;
+    this->seqCount_var = other.seqCount_var;
     return *this;
 }
 
@@ -62,6 +64,7 @@ void QoSMessage::parsimPack(cCommBuffer *b)
     cPacket::parsimPack(b);
     doPacking(b,this->from_var);
     doPacking(b,this->to_var);
+    doPacking(b,this->seqCount_var);
 }
 
 void QoSMessage::parsimUnpack(cCommBuffer *b)
@@ -69,6 +72,7 @@ void QoSMessage::parsimUnpack(cCommBuffer *b)
     cPacket::parsimUnpack(b);
     doUnpacking(b,this->from_var);
     doUnpacking(b,this->to_var);
+    doUnpacking(b,this->seqCount_var);
 }
 
 const char * QoSMessage::getFrom() const
@@ -89,6 +93,16 @@ const char * QoSMessage::getTo() const
 void QoSMessage::setTo(const char * to_var)
 {
     this->to_var = to_var;
+}
+
+unsigned long QoSMessage::getSeqCount() const
+{
+    return seqCount_var;
+}
+
+void QoSMessage::setSeqCount(unsigned long seqCount_var)
+{
+    this->seqCount_var = seqCount_var;
 }
 
 class QoSMessageDescriptor : public cClassDescriptor
@@ -138,7 +152,7 @@ const char *QoSMessageDescriptor::getProperty(const char *propertyname) const
 int QoSMessageDescriptor::getFieldCount(void *object) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 2+basedesc->getFieldCount(object) : 2;
+    return basedesc ? 3+basedesc->getFieldCount(object) : 3;
 }
 
 unsigned int QoSMessageDescriptor::getFieldTypeFlags(void *object, int field) const
@@ -152,8 +166,9 @@ unsigned int QoSMessageDescriptor::getFieldTypeFlags(void *object, int field) co
     static unsigned int fieldTypeFlags[] = {
         FD_ISEDITABLE,
         FD_ISEDITABLE,
+        FD_ISEDITABLE,
     };
-    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *QoSMessageDescriptor::getFieldName(void *object, int field) const
@@ -167,8 +182,9 @@ const char *QoSMessageDescriptor::getFieldName(void *object, int field) const
     static const char *fieldNames[] = {
         "from",
         "to",
+        "seqCount",
     };
-    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
 }
 
 int QoSMessageDescriptor::findField(void *object, const char *fieldName) const
@@ -177,6 +193,7 @@ int QoSMessageDescriptor::findField(void *object, const char *fieldName) const
     int base = basedesc ? basedesc->getFieldCount(object) : 0;
     if (fieldName[0]=='f' && strcmp(fieldName, "from")==0) return base+0;
     if (fieldName[0]=='t' && strcmp(fieldName, "to")==0) return base+1;
+    if (fieldName[0]=='s' && strcmp(fieldName, "seqCount")==0) return base+2;
     return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
@@ -191,8 +208,9 @@ const char *QoSMessageDescriptor::getFieldTypeString(void *object, int field) co
     static const char *fieldTypeStrings[] = {
         "string",
         "string",
+        "unsigned long",
     };
-    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *QoSMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -234,6 +252,7 @@ std::string QoSMessageDescriptor::getFieldAsString(void *object, int field, int 
     switch (field) {
         case 0: return oppstring2string(pp->getFrom());
         case 1: return oppstring2string(pp->getTo());
+        case 2: return ulong2string(pp->getSeqCount());
         default: return "";
     }
 }
@@ -250,6 +269,7 @@ bool QoSMessageDescriptor::setFieldAsString(void *object, int field, int i, cons
     switch (field) {
         case 0: pp->setFrom((value)); return true;
         case 1: pp->setTo((value)); return true;
+        case 2: pp->setSeqCount(string2ulong(value)); return true;
         default: return false;
     }
 }
@@ -265,8 +285,9 @@ const char *QoSMessageDescriptor::getFieldStructName(void *object, int field) co
     static const char *fieldStructNames[] = {
         NULL,
         NULL,
+        NULL,
     };
-    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *QoSMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const

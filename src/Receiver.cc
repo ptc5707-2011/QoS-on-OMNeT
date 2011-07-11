@@ -24,5 +24,6 @@ void Receiver::initialize()
 
 void Receiver::handleMessage(cMessage *msg)
 {
+	EV << this->getName() << " recebeu '" << msg->getName() << "'";
 	delete(msg);
 }

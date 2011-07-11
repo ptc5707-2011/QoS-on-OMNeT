@@ -28,8 +28,10 @@ void IdealRouter::handleMessage(cMessage *msg)
 
 	if(msg->isPacket()) {
 		if(strcmp(((QoSMessage *)msg)->getTo(), "R1") == 0) {
+			EV << "ROU2 encaminha mensagem para R1 '"<< msg->getName() <<"'";
 			send(msg, "out1");
 		} else if(strcmp(((QoSMessage *)msg)->getTo(), "R2") == 0) {
+			EV << "ROU2 encaminha mensagem para R2 '"<< msg->getName() <<"'";
 			send(msg, "out2");
 		}
 	}

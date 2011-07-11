@@ -29,6 +29,7 @@ class CBRApplicationNode : public cSimpleModule
 	cMessage *next;
 	long bytesPerPacket;
     double timeBetweenPackets;
+    long seqcounter;
 
   protected:
     virtual void initialize();

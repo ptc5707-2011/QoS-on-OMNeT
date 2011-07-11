@@ -21,6 +21,7 @@ void CBRApplicationNode::initialize()
 {
 	bytesPerPacket = par("bytesPerPacket").longValue();
 	timeBetweenPackets = par("timeBetweenPackets").doubleValue();
+	seqcounter = 0;
 
 	next = new cMessage("Next");
 	scheduleAt(simTime(), next);
@@ -28,10 +29,20 @@ void CBRApplicationNode::initialize()
 
 void CBRApplicationNode::handleMessage(cMessage *msg)
 {
-	QoSMessage *pkt = new QoSMessage("CBR Message");
+	seqcounter++;
+
+
+	QoSMessage *pkt = new QoSMessage();
 	pkt->setFrom("T1");
 	pkt->setTo("R1");
 	pkt->setByteLength(bytesPerPacket);
+	pkt->setSeqCount(seqcounter);
+
+	std::stringstream messageName;
+	messageName << "CBR message, seq: " << seqcounter;
+	pkt->setName(messageName.str().c_str());
+
+	EV << "T1 criou mensagem '"<< pkt->getName() <<"'";
 	send(pkt, "out1");
 	scheduleAt(simTime()+timeBetweenPackets, next);
 }

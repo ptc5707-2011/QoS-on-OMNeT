@@ -19,4 +19,5 @@
 packet QoSMessage {
     string from;
     string to;
+    unsigned long seqCount;
 }
