@@ -25,6 +25,9 @@ simple CBRApplicationNode like ApplicationNode
         string to;
         int bytesPerPacket @unit(B) = default(64B);
         double timeBetweenPackets @unit(s) = default(100ms);
+        
+        //Estatísticas
+        @statistic[length] (title="CBR Length";record=vector);
 
     gates:
         output out1;   
