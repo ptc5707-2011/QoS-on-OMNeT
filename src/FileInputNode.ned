@@ -18,6 +18,13 @@ package qos;
 //
 // TODO auto-generated module
 //
-simple FileInputNode
+simple FileInputNode like SourceNode
 {
+    parameters:
+        string from;
+        string to;
+        
+    gates:
+        output out1;
+            
 }
