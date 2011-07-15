@@ -37,12 +37,12 @@ network Network
         ROU2: IdealRouter {
             @display("p=533,216");
         }
-        T1: <applicationNodeType> like ApplicationNode {
+        T1: <applicationNodeType> like SourceNode {
             @display("p=72,65");
             from = "T1";
             to = "R1";
         }
-        T2: <interferenceNodeType> like InterferenceNode {
+        T2: <interferenceNodeType> like SourceNode {
             @display("p=72,365");
             from = "T2";
             to = "R2";

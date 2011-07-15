@@ -18,7 +18,7 @@ package qos;
 //
 // TODO auto-generated module
 //
-simple ARIMAInterferenceNode like InterferenceNode
+simple ARIMAInterferenceNode like SourceNode
 {
     parameters:
         string from;

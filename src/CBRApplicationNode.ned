@@ -18,7 +18,7 @@ package qos;
 //
 // TODO auto-generated module
 //
-simple CBRApplicationNode like ApplicationNode
+simple CBRApplicationNode like SourceNode
 {
     parameters:
         string from;
