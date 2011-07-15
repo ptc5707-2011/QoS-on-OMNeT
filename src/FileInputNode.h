@@ -13,22 +13,19 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package qos;
+#ifndef __QOS_FILEINPUTNODE_H_
+#define __QOS_FILEINPUTNODE_H_
 
-//
-// TODO auto-generated module
-//
-simple CBRApplicationNode like SourceNode
+#include <omnetpp.h>
+
+/**
+ * TODO - Generated class
+ */
+class FileInputNode : public cSimpleModule
 {
-    parameters:
-        string from;
-        string to;
-        int bytesPerPacket @unit(B) = default(64B);
-        double timeBetweenPackets @unit(s) = default(100ms);
-        
-        //Estatísticas
-        @statistic[sent_packet_length] (title="CBR Sent Packet Length";record=vector);
+  protected:
+    virtual void initialize();
+    virtual void handleMessage(cMessage *msg);
+};
 
-    gates:
-        output out1;   
-}
+#endif

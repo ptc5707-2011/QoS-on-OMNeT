@@ -13,11 +13,11 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#include "CBRApplicationNode.h"
+#include "CBRNode.h"
 
-Define_Module(CBRApplicationNode);
+Define_Module(CBRNode);
 
-void CBRApplicationNode::initialize()
+void CBRNode::initialize()
 {
 	bytesPerPacket = par("bytesPerPacket").longValue();
 	timeBetweenPackets = par("timeBetweenPackets").doubleValue();
@@ -27,7 +27,7 @@ void CBRApplicationNode::initialize()
 	scheduleAt(simTime(), next);
 }
 
-void CBRApplicationNode::handleMessage(cMessage *msg)
+void CBRNode::handleMessage(cMessage *msg)
 {
 	seqcounter++;
 

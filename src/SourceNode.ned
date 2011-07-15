@@ -13,30 +13,14 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef __QOS_ARIMAINTERFERENCENODE_H_
-#define __QOS_ARIMAINTERFERENCENODE_H_
+package qos;
 
-#include <omnetpp.h>
-#include "QoSMessage_m.h"
-
-/**
- * TODO - Generated class
- */
-class ARIMAInterferenceNode : public cSimpleModule
+moduleinterface SourceNode
 {
+    parameters:
+        string from;
+        string to;
 
-	private:
-		int p, q, d;
-		std::vector<double> phi;
-		std::vector<double> rho;
-		std::vector<double> yt;
-		std::vector<double> xt;
-		std::vector<double> wt;
-
-	protected:
-		virtual void initialize();
-		virtual void handleMessage(cMessage *msg);
-		double getPacket();
-};
-
-#endif
+    gates:
+        output out1;   
+}

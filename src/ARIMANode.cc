@@ -13,12 +13,12 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#include "ARIMAInterferenceNode.h"
+#include "ARIMANode.h"
 
-Define_Module(ARIMAInterferenceNode);
+Define_Module(ARIMANode);
 
 
-double ARIMAInterferenceNode::getPacket()
+double ARIMANode::getPacket()
 {
 
 	double new_yt = 0.0;
@@ -46,7 +46,7 @@ double ARIMAInterferenceNode::getPacket()
 
 }
 
-void ARIMAInterferenceNode::initialize()
+void ARIMANode::initialize()
 {
 	//Obter os parâmetros
 	const char *rho_string = par("rho_params").stringValue();
@@ -83,7 +83,7 @@ void ARIMAInterferenceNode::initialize()
 
 
 
-void ARIMAInterferenceNode::handleMessage(cMessage *msg)
+void ARIMANode::handleMessage(cMessage *msg)
 {
 
 }

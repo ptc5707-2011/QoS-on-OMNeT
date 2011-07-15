@@ -13,27 +13,16 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef __QOS_CBRAPPLICATIONNODE_H_
-#define __QOS_CBRAPPLICATIONNODE_H_
+#include "FileInputNode.h"
 
-#include <omnetpp.h>
-#include "QoSMessage_m.h"
+Define_Module(FileInputNode);
 
-
-/**
- * TODO - Generated class
- */
-class CBRApplicationNode : public cSimpleModule
+void FileInputNode::initialize()
 {
-  private:
-	cMessage *next;
-	long bytesPerPacket;
-    double timeBetweenPackets;
-    long seqcounter;
+    // TODO - Generated method body
+}
 
-  protected:
-    virtual void initialize();
-    virtual void handleMessage(cMessage *msg);
-};
-
-#endif
+void FileInputNode::handleMessage(cMessage *msg)
+{
+    // TODO - Generated method body
+}

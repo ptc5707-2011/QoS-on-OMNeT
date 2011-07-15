@@ -29,9 +29,9 @@ O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc and .msg files
 OBJS = \
-    $O/ARIMAInterferenceNode.o \
+    $O/ARIMANode.o \
     $O/BufferedRouter.o \
-    $O/CBRApplicationNode.o \
+    $O/CBRNode.o \
     $O/FileInputNode.o \
     $O/IdealRouter.o \
     $O/Receiver.o \
@@ -112,14 +112,11 @@ depend:
 $O/BufferedRouter.o: BufferedRouter.cc \
 	QoSMessage_m.h \
 	BufferedRouter.h
-$O/CBRApplicationNode.o: CBRApplicationNode.cc \
-	CBRApplicationNode.h \
-	QoSMessage_m.h
-$O/ARIMAInterferenceNode.o: ARIMAInterferenceNode.cc \
-	ARIMAInterferenceNode.h \
-	QoSMessage_m.h
 $O/IdealRouter.o: IdealRouter.cc \
 	IdealRouter.h \
+	QoSMessage_m.h
+$O/ARIMANode.o: ARIMANode.cc \
+	ARIMANode.h \
 	QoSMessage_m.h
 $O/Receiver.o: Receiver.cc \
 	Receiver.h \
@@ -128,4 +125,7 @@ $O/FileInputNode.o: FileInputNode.cc \
 	FileInputNode.h
 $O/QoSMessage_m.o: QoSMessage_m.cc \
 	QoSMessage_m.h
+$O/CBRNode.o: CBRNode.cc \
+	QoSMessage_m.h \
+	CBRNode.h
 

@@ -18,15 +18,17 @@ package qos;
 //
 // TODO auto-generated module
 //
-simple ARIMAInterferenceNode like SourceNode
+simple CBRNode like SourceNode
 {
     parameters:
         string from;
         string to;
-        string rho_params;
-        string phi_params;
-        int d;
+        int bytesPerPacket @unit(B) = default(64B);
+        double timeBetweenPackets @unit(s) = default(100ms);
+        
+        //Estatísticas
+        @statistic[sent_packet_length] (title="CBR Sent Packet Length";record=vector);
 
     gates:
-        output out1;  
+        output out1;   
 }
