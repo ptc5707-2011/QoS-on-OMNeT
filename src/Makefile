@@ -32,6 +32,7 @@ OBJS = \
     $O/ARIMAInterferenceNode.o \
     $O/BufferedRouter.o \
     $O/CBRApplicationNode.o \
+    $O/FileInputNode.o \
     $O/IdealRouter.o \
     $O/Receiver.o \
     $O/QoSMessage_m.o
@@ -108,21 +109,23 @@ depend:
 	$(MAKEDEPEND) $(INCLUDE_PATH) -f Makefile -P\$$O/ -- $(MSG_CC_FILES)  ./*.cc
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
-$O/QoSMessage_m.o: QoSMessage_m.cc \
-	QoSMessage_m.h
 $O/BufferedRouter.o: BufferedRouter.cc \
 	QoSMessage_m.h \
 	BufferedRouter.h
 $O/CBRApplicationNode.o: CBRApplicationNode.cc \
 	CBRApplicationNode.h \
 	QoSMessage_m.h
-$O/IdealRouter.o: IdealRouter.cc \
-	IdealRouter.h \
-	QoSMessage_m.h
 $O/ARIMAInterferenceNode.o: ARIMAInterferenceNode.cc \
 	ARIMAInterferenceNode.h \
 	QoSMessage_m.h
+$O/IdealRouter.o: IdealRouter.cc \
+	IdealRouter.h \
+	QoSMessage_m.h
 $O/Receiver.o: Receiver.cc \
 	Receiver.h \
+	QoSMessage_m.h
+$O/FileInputNode.o: FileInputNode.cc \
+	FileInputNode.h
+$O/QoSMessage_m.o: QoSMessage_m.cc \
 	QoSMessage_m.h
 
