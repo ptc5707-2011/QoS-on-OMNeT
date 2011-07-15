@@ -116,11 +116,11 @@ $O/BufferedRouter.o: BufferedRouter.cc \
 $O/CBRApplicationNode.o: CBRApplicationNode.cc \
 	CBRApplicationNode.h \
 	QoSMessage_m.h
-$O/ARIMAInterferenceNode.o: ARIMAInterferenceNode.cc \
-	ARIMAInterferenceNode.h \
-	QoSMessage_m.h
 $O/IdealRouter.o: IdealRouter.cc \
 	IdealRouter.h \
+	QoSMessage_m.h
+$O/ARIMAInterferenceNode.o: ARIMAInterferenceNode.cc \
+	ARIMAInterferenceNode.h \
 	QoSMessage_m.h
 $O/Receiver.o: Receiver.cc \
 	Receiver.h \
