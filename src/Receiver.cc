@@ -25,5 +25,10 @@ void Receiver::initialize()
 void Receiver::handleMessage(cMessage *msg)
 {
 	EV << this->getName() << " recebeu '" << msg->getName() << "'";
+	QoSMessage *pkt = (QoSMessage *)msg;
+
+	simsignal_t lengthSignalID = registerSignal("received_packet_length");
+	emit(lengthSignalID, (long)pkt->getByteLength());
+
 	delete(msg);
 }

@@ -123,5 +123,6 @@ $O/IdealRouter.o: IdealRouter.cc \
 	IdealRouter.h \
 	QoSMessage_m.h
 $O/Receiver.o: Receiver.cc \
-	Receiver.h
+	Receiver.h \
+	QoSMessage_m.h
 

@@ -27,7 +27,7 @@ simple CBRApplicationNode like ApplicationNode
         double timeBetweenPackets @unit(s) = default(100ms);
         
         //Estatísticas
-        @statistic[length] (title="CBR Length";record=vector);
+        @statistic[sent_packet_length] (title="CBR Sent Packet Length";record=vector);
 
     gates:
         output out1;   

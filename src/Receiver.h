@@ -17,6 +17,7 @@
 #define __QOS_RECEIVER_H_
 
 #include <omnetpp.h>
+#include "QoSMessage_m.h"
 
 /**
  * TODO - Generated class

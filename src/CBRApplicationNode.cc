@@ -43,7 +43,7 @@ void CBRApplicationNode::handleMessage(cMessage *msg)
 	pkt->setName(messageName.str().c_str());
 	EV << "T1 criou mensagem '"<< pkt->getName() <<"'";
 
-	simsignal_t lengthSignalID = registerSignal("length");
+	simsignal_t lengthSignalID = registerSignal("sent_packet_length");
 	emit(lengthSignalID, (long)pkt->getByteLength());
 
 	send(pkt, "out1");

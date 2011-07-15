@@ -20,6 +20,11 @@ package qos;
 //
 simple Receiver
 {
+    
+    parameters:
+        //Estatísticas
+        @statistic[received_packet_length] (title="Received packet length";record=vector);
+         
     gates:
         input in1;
 }
