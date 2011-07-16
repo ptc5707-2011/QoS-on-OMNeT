@@ -23,6 +23,7 @@ simple FileInputNode like SourceNode
     parameters:
         string from;
         string to;
+        string filename;
         
     gates:
         output out1;

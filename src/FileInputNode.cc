@@ -17,12 +17,32 @@
 
 Define_Module(FileInputNode);
 
+
+
+
 void FileInputNode::initialize()
 {
-    // TODO - Generated method body
+
+	//Abrir o arquivo
+	filename = par("filename").stringValue();
+	inputFile.open(filename);
+	if(!inputFile.is_open()) {
+		error("%s could not be opened", filename);
+	}
+
+
+
 }
 
 void FileInputNode::handleMessage(cMessage *msg)
 {
-    // TODO - Generated method body
+
+}
+
+void FileInputNode::finish() {
+
+	//Fechar o arquivo
+	if(inputFile.is_open()) {
+		inputFile.close();
+	}
 }

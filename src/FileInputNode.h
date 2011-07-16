@@ -17,15 +17,25 @@
 #define __QOS_FILEINPUTNODE_H_
 
 #include <omnetpp.h>
+#include <iostream>
+#include <fstream>
 
 /**
  * TODO - Generated class
  */
 class FileInputNode : public cSimpleModule
 {
-  protected:
-    virtual void initialize();
-    virtual void handleMessage(cMessage *msg);
+
+	private:
+		const char* filename;
+		std::ifstream inputFile;
+		simtime_t last_timestamp;
+
+
+	protected:
+		virtual void initialize();
+		virtual void handleMessage(cMessage *msg);
+		virtual void finish();
 };
 
 #endif
