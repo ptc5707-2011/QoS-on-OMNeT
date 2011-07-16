@@ -17,11 +17,59 @@
 
 Define_Module(FileInputNode);
 
+struct timestamp_length FileInputNode::getNextPacket() {
 
+	using namespace std;
+	timestamp_length next_packet;
+	string line;
+
+
+
+	//Tentar pegar uma linha.
+	if(getline(inputFile, line)) //Se conseguir
+	{
+		cStringTokenizer tokenizer(line.c_str());
+
+		//Pegar timestamp da linha
+		if(tokenizer.hasMoreTokens()) {
+			const char* timestamp_string = tokenizer.nextToken();
+		} else {
+			error("Malformed file. Impossible to parse sample line.");
+		}
+
+
+		//Pegar número de bytes da linha
+		if(tokenizer.hasMoreTokens()) {
+			const char* byte_length_string = tokenizer.nextToken();
+		} else {
+			error("Malformed file. Impossible to parse sample line.");
+		}
+
+
+
+
+
+
+
+
+	} else //Se não conseguir
+	{
+		next_packet.timestamp = 0;
+		next_packet.byteLength = 0;
+		next_packet.stop = 0;
+
+		return next_packet;
+	}
+
+
+}
 
 
 void FileInputNode::initialize()
 {
+
+	//Inicializar o timestamp
+	last_timestamp = 0;
 
 	//Abrir o arquivo
 	filename = par("filename").stringValue();

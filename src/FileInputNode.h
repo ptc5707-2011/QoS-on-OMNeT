@@ -19,6 +19,13 @@
 #include <omnetpp.h>
 #include <iostream>
 #include <fstream>
+#include <string>
+
+struct timestamp_length {
+	simtime_t timestamp;
+	long byteLength;
+	bool stop;
+};
 
 /**
  * TODO - Generated class
@@ -28,14 +35,15 @@ class FileInputNode : public cSimpleModule
 
 	private:
 		const char* filename;
-		std::ifstream inputFile;
 		simtime_t last_timestamp;
+		std::ifstream inputFile;
 
 
 	protected:
 		virtual void initialize();
 		virtual void handleMessage(cMessage *msg);
 		virtual void finish();
+		struct timestamp_length getNextPacket();
 };
 
 #endif
