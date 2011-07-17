@@ -1,0 +1,39 @@
+===============================
+Sobre o módulo FileInputNode:
+	O módulo FileInputNode é capaz obter tráfego de um arquivo texto.
+	O arquivo deve ter o seguinte formato:
+	_Cada linha corresponde a um pacote e deve contar um timestamp
+	e o número de bytes no pacote, no seguinte formato:
+	timestamp em formato hexadecimal sem 0x como prefixo seguido 
+	de tab seguido de número de bytes do pacote em decimal
+	_O número absoluto do timestamp não importa. O primeiro timestamp
+	é tomado como 0, e pacotes sucessivos são enviados em intervalos
+	correspondentes à diferença dos timestamps.
+	
+	Exemplo de arquivo (o tab está como '\t' apenas para deixar explícito
+	no arquivo real, deve ser um caracter tab):
+		
+	4c2259b00001a700'\t'137
+	4c2259b0000329c0'\t'62
+	4c2259b000050100'\t'68
+	4c2259b0000eee80'\t'88
+	4c2259b000126580'\t'68
+	4c2259b000249f00'\t'62
+	4c2259b00028e380'\t'80
+	4c2259b000291780'\t'62
+	4c2259b000292580'\t'68
+	4c2259b0002eb280'\t'68
+	4c2259b0002fdb00'\t'97
+	4c2259b0003b8e00'\t'65
+	4c2259b0003c54c0'\t'62
+	4c2259b000405c00'\t'77
+	4c2259b000413e00'\t'214
+	4c2259b00048a580'\t'62
+	4c2259b000491000'\t'68
+	4c2259b00051b240'\t'62
+	4c2259b000536f80'\t'62
+	4c2259b00053a180'\t'168
+	4c2259b000592240'\t'68
+	4c2259b0005a0200'\t'62
+	4c2259b0005be380'\t'1196
+	

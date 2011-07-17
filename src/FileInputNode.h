@@ -20,10 +20,17 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <math.h>
+#include "QoSMessage_m.h"
 
 struct timestamp_length {
-	simtime_t timestamp;
-	long byteLength;
+	unsigned long long timestamp;
+	unsigned long byteLength;
+};
+
+struct packet_time {
+	simtime_t schedule_at;
+	unsigned long byteLength;
 	bool stop;
 };
 
@@ -35,15 +42,16 @@ class FileInputNode : public cSimpleModule
 
 	private:
 		const char* filename;
-		simtime_t last_timestamp;
+		unsigned long long last_timestamp;
 		std::ifstream inputFile;
-
+		struct timestamp_length parseLine(std::string line);
+		struct packet_time getPacketTimestamp();
 
 	protected:
 		virtual void initialize();
 		virtual void handleMessage(cMessage *msg);
 		virtual void finish();
-		struct timestamp_length getNextPacket();
+
 };
 
 #endif
