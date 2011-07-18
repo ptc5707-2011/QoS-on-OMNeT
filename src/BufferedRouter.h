@@ -30,7 +30,7 @@ class BufferedRouter : public cSimpleModule
 		cMessage *next;
 		bool isFinite;
 		long bufferSize;
-		int bufferedSize;
+		long bufferedSize;
 
 	protected:
 		virtual void initialize();

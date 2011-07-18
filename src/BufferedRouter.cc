@@ -17,7 +17,7 @@ Define_Module(BufferedRouter);
 
 void BufferedRouter::initialize()
 {
-	next = new cMessage("Next");
+	next = new cMessage("Buffered Router Next");
 	isFinite = par("isFinite").boolValue();
 	bufferSize = par("bufferSize").longValue();
 	bufferedSize = 0;
@@ -31,8 +31,8 @@ void BufferedRouter::handleMessage(cMessage *msg)
 {
 	cGate *outGate = gate("out1");
 	cChannel *txChannel = outGate->getChannel();
-	//Se é um pacote
-	if(msg->isPacket()) {
+	//Se não é uma mensagem interna (ou seja, é um pacote)
+	if(!msg->isSelfMessage()) {
 		//Se o canal está livre
 		if(!txChannel->isBusy()) {
 			//Envia a mensagem
@@ -48,7 +48,7 @@ void BufferedRouter::handleMessage(cMessage *msg)
 				long messageLength = ((QoSMessage *)msg)->getByteLength();
 				//Se a mensagem for maior que o buffer disponível
 				if(messageLength+bufferedSize > bufferSize) {
-					EV << "Mensagem descartada em ROU1:" << msg->getName();
+					EV << "Mensagem descartada em ROU1:" << msg->getName() << ". messageLength: " << messageLength << "; bufferedSize: " << bufferedSize << "; bufferSize: " << bufferSize;
 					delete(msg);
 				}
 				//Se a mensagem couber no buffer disponível
@@ -75,13 +75,13 @@ void BufferedRouter::handleMessage(cMessage *msg)
 			//Se o buffer é finito
 			if(isFinite) {
 				//Obter o tamanho da mensagem
-				long messageLength = ((QoSMessage *)msg)->getByteLength();
+				long messageLength = ((QoSMessage *)QoSMessageToSend)->getByteLength();
 				//Atualizar o contador de buffer
 				bufferedSize = bufferedSize - messageLength;
 			}
 
 			//Envia a mensagem
-			EV << "ROU1 encaminha mensagem retirada do buffer '"<< msg->getName() <<"'";
+			EV << "ROU1 encaminha mensagem retirada do buffer '"<< QoSMessageToSend->getName() <<"'";
 			send(QoSMessageToSend, outGate);
 			//Agenda o próximo envio para o instante que o envio atual terminar
 			scheduleAt(simTime()+txChannel->calculateDuration(QoSMessageToSend), next);
