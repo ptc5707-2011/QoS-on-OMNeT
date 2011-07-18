@@ -25,6 +25,9 @@ simple FileInputNode like SourceNode
         string to;
         string filename;
         
+        //Estatísticas
+        @statistic[sent_packet_length] (title="File Input Sent Packet Length";record=vector);
+        
     gates:
         output out1;
             

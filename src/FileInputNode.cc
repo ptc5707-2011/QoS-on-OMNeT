@@ -102,6 +102,8 @@ void FileInputNode::initialize()
 		error("%s could not be opened", filename);
 	}
 
+	//Registrar o sinal de envio de pacotes.
+	lengthSignalID = registerSignal("sent_packet_length");
 
 	//Tentar pegar a primeira linha para inicializar a variável last_timestamp
 	//e enviar o primeiro pacote.
@@ -129,6 +131,7 @@ void FileInputNode::initialize()
 	first_pkt->setSeqCount(1);
 	first_pkt->setByteLength(parsed_line.byteLength);
 	send(first_pkt,"out1");
+	emit(lengthSignalID, (unsigned long)first_pkt->getByteLength());
 
 	//Obter o próximo pacote e seu timestamp
 	next_packet_timestamp = getPacketTimestamp();
@@ -152,6 +155,7 @@ void FileInputNode::handleMessage(cMessage *msg)
 
 	seqcounter++;
 	send(msg, "out1");
+	emit(lengthSignalID, (unsigned long)((QoSMessage *)msg)->getByteLength());
 
 	struct packet_time next_packet_timestamp = getPacketTimestamp();
 
@@ -168,6 +172,8 @@ void FileInputNode::handleMessage(cMessage *msg)
 		next_pkt->setByteLength(next_packet_timestamp.byteLength);
 
 		scheduleAt(simTime() + next_packet_timestamp.schedule_at, next_pkt);
+		} else {
+			//TODO: EMITIR SINAL PARA PARAR
 		}
 }
 

@@ -48,6 +48,9 @@ class FileInputNode : public cSimpleModule
 		struct packet_time getPacketTimestamp();
 		unsigned long seqcounter;
 
+		//Sinais
+		simsignal_t lengthSignalID;
+
 	protected:
 		virtual void initialize();
 		virtual void handleMessage(cMessage *msg);
