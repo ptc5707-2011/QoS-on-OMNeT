@@ -23,7 +23,7 @@ void CBRNode::initialize()
 	timeBetweenPackets = par("timeBetweenPackets").doubleValue();
 	seqcounter = 0;
 
-	next = new cMessage("Next");
+	next = new cMessage("CBR Next");
 	scheduleAt(simTime(), next);
 }
 
