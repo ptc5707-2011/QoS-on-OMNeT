@@ -55,12 +55,14 @@ void BufferedRouter::handleMessage(cMessage *msg)
 				else {
 					//Atualizar o contador de buffer
 					bufferedSize = bufferedSize + messageLength;
+					EV << "ROU1 adicionando mensagem ao buffer finito:" << msg->getName() << ". messageLength: " << messageLength << "; bufferedSize: " << bufferedSize << "; bufferSize: " << bufferSize;
 					//Armazenar a mensagem no buffer
 					queue.insert(msg);
 				}
 			}
 			else {
 				//Armazenar a mensagem no buffer
+				EV << "ROU1 adicionando mensagem ao buffer infinito:" << msg->getName();
 				queue.insert(msg);
 			}
 		}
