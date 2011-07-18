@@ -23,13 +23,13 @@ import ned.IdealChannel;
 network Network
 {
     parameters:
-    @display("bgb=901,567");
-    double link_delay @unit(s)= default(100ms);
-    double link_datarate @unit(bps)= default(100Mbps);
-    
-    string applicationNodeType;
-    string interferenceNodeType;
-    
+        @display("bgb=901,567");
+        double link_delay @unit(s) = default(100ms);
+        double link_datarate @unit(bps) = default(100Mbps);
+
+        string applicationNodeType;
+        string interferenceNodeType;
+
     submodules:
         ROU1: BufferedRouter {
             @display("p=179,216");
@@ -59,5 +59,27 @@ network Network
         T2.out1 --> IdealChannel --> ROU1.in2;
         ROU2.out1 --> IdealChannel --> R1.in1;
         ROU2.out2 --> IdealChannel --> R2.in1;
-        ROU1.out1 --> DatarateChannel  { delay=link_delay; datarate=link_datarate; } --> ROU2.in1;
+        ROU1.out1 --> DatarateChannel {  delay = link_delay; datarate = link_datarate; } --> ROU2.in1;
 }
+//
+// TODO documentation
+//
+// @author hugo
+//
+network FileInputTest
+{
+    
+    parameters:
+        string senderType;
+    
+    submodules:
+        T2: <senderType> like SourceNode {
+            @display("p=88,88");
+        }
+        R2: Receiver {
+            @display("p=189,88");
+        }
+    connections:
+        T2.out1 --> IdealChannel --> R2.in1;
+}
+
