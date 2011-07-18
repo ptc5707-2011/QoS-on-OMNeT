@@ -121,12 +121,12 @@ void FileInputNode::initialize()
 		error("Could not get the first line of the file for parsing");
 	}
 
-
+	seqcounter++;
 	//Construir o primeiro pacote e enviar
 	first_pkt->setName("File message, seq: 0");
 	first_pkt->setFrom("T2");
 	first_pkt->setTo("R2");
-	first_pkt->setSeqCount(0);
+	first_pkt->setSeqCount(1);
 	first_pkt->setByteLength(parsed_line.byteLength);
 	send(first_pkt,"out1");
 
@@ -135,10 +135,12 @@ void FileInputNode::initialize()
 
 	//Se o pacote existir (houver a linha no arquivo), agendar seu envio
 	if(!next_packet_timestamp.stop) {
+		seqcounter++;
 		QoSMessage * next_pkt = new QoSMessage();
-		next_pkt->setName("File message");
+		next_pkt->setName("File message, seq: 2");
 		next_pkt->setFrom("T2");
 		next_pkt->setTo("R2");
+		next_pkt->setSeqCount(1);
 		next_pkt->setByteLength(next_packet_timestamp.byteLength);
 
 		scheduleAt(simTime() + next_packet_timestamp.schedule_at, next_pkt);
