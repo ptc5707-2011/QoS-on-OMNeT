@@ -90,6 +90,8 @@ struct packet_time FileInputNode::getPacketTimestamp() {
 void FileInputNode::initialize()
 {
 
+	seqcounter = 0;
+
 	QoSMessage *first_pkt = new QoSMessage();
 	struct packet_time next_packet_timestamp;
 
@@ -121,9 +123,10 @@ void FileInputNode::initialize()
 
 
 	//Construir o primeiro pacote e enviar
-	first_pkt->setName("File message");
+	first_pkt->setName("File message, seq: 0");
 	first_pkt->setFrom("T2");
 	first_pkt->setTo("R2");
+	first_pkt->setSeqCount(0);
 	first_pkt->setByteLength(parsed_line.byteLength);
 	send(first_pkt,"out1");
 
@@ -145,15 +148,21 @@ void FileInputNode::initialize()
 void FileInputNode::handleMessage(cMessage *msg)
 {
 
+	seqcounter++;
 	send(msg, "out1");
 
 	struct packet_time next_packet_timestamp = getPacketTimestamp();
 
 	if(!next_packet_timestamp.stop) {
 		QoSMessage * next_pkt = new QoSMessage();
-		next_pkt->setName("File message");
+
+		std::stringstream messageName;
+		messageName << "File message, seq: " << seqcounter;
+
+		next_pkt->setName(messageName.str().c_str());
 		next_pkt->setFrom("T2");
 		next_pkt->setTo("R2");
+		next_pkt->setSeqCount(seqcounter);
 		next_pkt->setByteLength(next_packet_timestamp.byteLength);
 
 		scheduleAt(simTime() + next_packet_timestamp.schedule_at, next_pkt);

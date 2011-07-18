@@ -46,6 +46,7 @@ class FileInputNode : public cSimpleModule
 		std::ifstream inputFile;
 		struct timestamp_length parseLine(std::string line);
 		struct packet_time getPacketTimestamp();
+		unsigned long seqcounter;
 
 	protected:
 		virtual void initialize();
