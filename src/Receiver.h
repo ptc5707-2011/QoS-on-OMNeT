@@ -24,9 +24,14 @@
  */
 class Receiver : public cSimpleModule
 {
-  protected:
-    virtual void initialize();
-    virtual void handleMessage(cMessage *msg);
+
+	private:
+	simsignal_t lengthSignalID;
+	simsignal_t seqSignalID;
+
+	protected:
+		virtual void initialize();
+		virtual void handleMessage(cMessage *msg);
 };
 
 #endif

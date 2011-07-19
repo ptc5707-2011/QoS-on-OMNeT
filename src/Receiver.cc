@@ -19,7 +19,9 @@ Define_Module(Receiver);
 
 void Receiver::initialize()
 {
-    // TODO - Generated method body
+    //Registrar sinais
+	lengthSignalID = registerSignal("received_packet_length");
+	seqSignalID = registerSignal("received_packet_seq");
 }
 
 void Receiver::handleMessage(cMessage *msg)
@@ -27,8 +29,8 @@ void Receiver::handleMessage(cMessage *msg)
 	EV << this->getName() << " recebeu '" << msg->getName() << "'";
 	QoSMessage *pkt = (QoSMessage *)msg;
 
-	simsignal_t lengthSignalID = registerSignal("received_packet_length");
-	emit(lengthSignalID, (long)pkt->getByteLength());
+	emit(lengthSignalID, (unsigned long)pkt->getByteLength());
+	emit(seqSignalID, (unsigned long)pkt->getSeqCount());
 
 	delete(msg);
 }
