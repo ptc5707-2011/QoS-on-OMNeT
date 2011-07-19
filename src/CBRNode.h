@@ -31,6 +31,10 @@ class CBRNode : public cSimpleModule
     double timeBetweenPackets;
     unsigned long seqcounter;
 
+    //Sinais
+    simsignal_t lengthSignalID;
+    simsignal_t seqSignalID;
+
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);

@@ -25,6 +25,10 @@ void CBRNode::initialize()
 
 	next = new cMessage("CBR Next");
 	scheduleAt(simTime(), next);
+
+	//Registrar sinais
+	lengthSignalID = registerSignal("sent_packet_length");
+	seqSignalID = registerSignal("sent_packet_seq");
 }
 
 void CBRNode::handleMessage(cMessage *msg)
@@ -43,8 +47,8 @@ void CBRNode::handleMessage(cMessage *msg)
 	pkt->setName(messageName.str().c_str());
 	EV << "T1 criou mensagem '"<< pkt->getName() <<"'";
 
-	simsignal_t lengthSignalID = registerSignal("sent_packet_length");
-	emit(lengthSignalID, (long)pkt->getByteLength());
+	emit(lengthSignalID, (unsigned long)pkt->getByteLength());
+	emit(seqSignalID, (unsigned long)pkt->getSeqCount());
 
 	send(pkt, "out1");
 	scheduleAt(simTime()+timeBetweenPackets, next);
