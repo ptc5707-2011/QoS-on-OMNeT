@@ -32,6 +32,17 @@ class BufferedRouter : public cSimpleModule
 		long bufferSize;
 		long bufferedSize;
 
+		//Sinais
+		simsignal_t droppedFromT1SeqID; 	//Seq number de drop de pacotes de T1 pra R1
+		simsignal_t droppedFromT2SeqID;		//Seq number de drop de pacotes de T2 para R2
+		simsignal_t sentToR1SeqID;			//Seq number de pacotes enviados de T1 para R1
+		simsignal_t sentToR2SeqID;			//Seq number de pacotes enviados de T2 para R2
+		simsignal_t droppedFromT1LengthID;	//Comprimento em bytes de drop de pacotes de T1 para R1
+		simsignal_t droppedFromT2LengthID;	//Comprimento em bytes de drop de pacotes de T2 para R2
+		simsignal_t sentToR1LengthID;		//Comprimento em bytes de pacotes enviados de T1 para R1
+		simsignal_t sentToR2LengthID;		//Comprimento em bytes de pacotes enviados de T2 para R2
+
+
 	protected:
 		virtual void initialize();
 		virtual void handleMessage(cMessage *msg);

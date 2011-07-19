@@ -25,6 +25,17 @@ void BufferedRouter::initialize()
 	EV << "Buffer size: " << bufferSize << "\n";
 	EV << "Is finite? " << isFinite << "\n";
 	EV << "Buffered size: " << bufferedSize << "\n";
+
+	//Registro de sinais
+	droppedFromT1SeqID = registerSignal("dropped_t1_seq");
+	droppedFromT2SeqID = registerSignal("dropped_t2_seq");
+	sentToR1SeqID = registerSignal("sent_r1_seq");
+	sentToR2SeqID = registerSignal("sent_r2_seq");
+	droppedFromT1LengthID = registerSignal("dropped_t1_length");
+	droppedFromT2LengthID = registerSignal("dropped_t2_length");
+	sentToR1LengthID = registerSignal("sent_t1_length");
+	sentToR2LengthID = registerSignal("sent_t2_length");
+
 }
 
 void BufferedRouter::handleMessage(cMessage *msg)
@@ -38,6 +49,17 @@ void BufferedRouter::handleMessage(cMessage *msg)
 			//Envia a mensagem
 			EV << "ROU1 encaminha mensagem imediatamente '"<< msg->getName() <<"'";
 			send(msg, outGate);
+
+			//Envio de sinais indicando envio de mensagens
+			QoSMessage *pkt = (QoSMessage *)msg;
+			if(strcmp(pkt->getTo(), "R1")==0) {
+				emit(sentToR1SeqID, (unsigned long)pkt->getSeqCount());
+				emit(sentToR1LengthID, (unsigned long)pkt->getByteLength());
+			} else if(strcmp(pkt->getTo(), "R2")==0) {
+				emit(sentToR2SeqID, (unsigned long)pkt->getSeqCount());
+				emit(sentToR2LengthID, (unsigned long)pkt->getByteLength());
+			}
+
 			//Agenda o próximo envio para o instante que o envio atual terminar
 			scheduleAt(simTime()+txChannel->calculateDuration(msg), next);
 		}
@@ -48,8 +70,19 @@ void BufferedRouter::handleMessage(cMessage *msg)
 				long messageLength = ((QoSMessage *)msg)->getByteLength();
 				//Se a mensagem for maior que o buffer disponível
 				if(messageLength+bufferedSize > bufferSize) {
-					EV << "Mensagem descartada em ROU1:" << msg->getName() << ". messageLength: " << messageLength << "; bufferedSize: " << bufferedSize << "; bufferSize: " << bufferSize;
 					delete(msg);
+					EV << "Mensagem descartada em ROU1:" << msg->getName() << ". messageLength: " << messageLength << "; bufferedSize: " << bufferedSize << "; bufferSize: " << bufferSize;
+
+					//Envio de sinais indicando perda de pacotes.
+					QoSMessage *pkt = (QoSMessage *)msg;
+					if(strcmp(pkt->getFrom(), "T1")==0) {
+						emit(droppedFromT1SeqID, (unsigned long)pkt->getSeqCount());
+						emit(droppedFromT1LengthID, (unsigned long)pkt->getByteLength());
+					} else if(strcmp(pkt->getFrom(), "T2")==0) {
+						emit(droppedFromT2SeqID, (unsigned long)pkt->getSeqCount());
+						emit(droppedFromT2LengthID, (unsigned long)pkt->getByteLength());
+					}
+
 				}
 				//Se a mensagem couber no buffer disponível
 				else {
@@ -85,6 +118,16 @@ void BufferedRouter::handleMessage(cMessage *msg)
 			//Envia a mensagem
 			EV << "ROU1 encaminha mensagem retirada do buffer '"<< QoSMessageToSend->getName() <<"'";
 			send(QoSMessageToSend, outGate);
+
+			//Envio de sinais indicando envio de mensagens
+			QoSMessage *pkt = QoSMessageToSend;
+			if(strcmp(pkt->getTo(), "R1")==0) {
+				emit(sentToR1SeqID, (unsigned long)pkt->getSeqCount());
+				emit(sentToR1LengthID, (unsigned long)pkt->getByteLength());
+			} else if(strcmp(pkt->getTo(), "R2")==0) {
+				emit(sentToR2SeqID, (unsigned long)pkt->getSeqCount());
+				emit(sentToR2LengthID, (unsigned long)pkt->getByteLength());
+			}
 			//Agenda o próximo envio para o instante que o envio atual terminar
 			scheduleAt(simTime()+txChannel->calculateDuration(QoSMessageToSend), next);
 		}
