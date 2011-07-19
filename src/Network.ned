@@ -24,8 +24,8 @@ network Network
 {
     parameters:
         @display("bgb=901,567");
-        double link_delay @unit(s) = default(100ms);
-        double link_datarate @unit(bps) = default(100Mbps);
+        double link_delay @unit(s);
+        double link_datarate @unit(bps);
 
         string applicationNodeType;
         string interferenceNodeType;

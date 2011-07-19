@@ -23,8 +23,8 @@ simple CBRNode like SourceNode
     parameters:
         string from;
         string to;
-        int bytesPerPacket @unit(B) = default(64B);
-        double timeBetweenPackets @unit(s) = default(100ms);
+        int bytesPerPacket @unit(B);
+        double timeBetweenPackets @unit(s);
         
         //Estatísticas
         @statistic[sent_packet_length] (title="CBR Sent Packet Length";record=vector);

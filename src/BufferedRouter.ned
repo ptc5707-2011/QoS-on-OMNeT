@@ -21,8 +21,8 @@ package qos;
 simple BufferedRouter
 {
     parameters:
-        bool isFinite = default(true);
-        int bufferSize @unit(byte) = default(1MB);
+        bool isFinite;
+        int bufferSize @unit(byte);
         @display("i=abstract/router");
         
         //Estatísticas
