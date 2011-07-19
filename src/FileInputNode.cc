@@ -143,7 +143,7 @@ void FileInputNode::initialize()
 		next_pkt->setName("File message, seq: 2");
 		next_pkt->setFrom("T2");
 		next_pkt->setTo("R2");
-		next_pkt->setSeqCount(1);
+		next_pkt->setSeqCount(seqcounter);
 		next_pkt->setByteLength(next_packet_timestamp.byteLength);
 
 		scheduleAt(simTime() + next_packet_timestamp.schedule_at, next_pkt);
