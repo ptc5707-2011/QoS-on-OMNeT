@@ -50,6 +50,7 @@ class FileInputNode : public cSimpleModule
 
 		//Sinais
 		simsignal_t lengthSignalID;
+		simsignal_t seqSignalID;
 
 	protected:
 		virtual void initialize();

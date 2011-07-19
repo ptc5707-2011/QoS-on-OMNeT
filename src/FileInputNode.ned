@@ -27,6 +27,7 @@ simple FileInputNode like SourceNode
         
         //Estatísticas
         @statistic[sent_packet_length] (title="File Input Sent Packet Length";record=vector);
+        @statistic[sent_packet_seq] (title="File Input Sent Packet Sequence Number";record=vector);
         
     gates:
         output out1;

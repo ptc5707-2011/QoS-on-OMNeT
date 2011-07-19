@@ -104,6 +104,7 @@ void FileInputNode::initialize()
 
 	//Registrar o sinal de envio de pacotes.
 	lengthSignalID = registerSignal("sent_packet_length");
+	seqSignalID = registerSignal("sent_packet_seq");
 
 	//Tentar pegar a primeira linha para inicializar a variável last_timestamp
 	//e enviar o primeiro pacote.
@@ -132,6 +133,7 @@ void FileInputNode::initialize()
 	first_pkt->setByteLength(parsed_line.byteLength);
 	send(first_pkt,"out1");
 	emit(lengthSignalID, (unsigned long)first_pkt->getByteLength());
+	emit(seqSignalID, (unsigned long)first_pkt->getSeqCount());
 
 	//Obter o próximo pacote e seu timestamp
 	next_packet_timestamp = getPacketTimestamp();
@@ -156,6 +158,7 @@ void FileInputNode::handleMessage(cMessage *msg)
 	seqcounter++;
 	send(msg, "out1");
 	emit(lengthSignalID, (unsigned long)((QoSMessage *)msg)->getByteLength());
+	emit(seqSignalID, (unsigned long)((QoSMessage *)msg)->getSeqCount());
 
 	struct packet_time next_packet_timestamp = getPacketTimestamp();
 
