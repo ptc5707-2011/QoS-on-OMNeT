@@ -35,6 +35,7 @@ void BufferedRouter::initialize()
 	droppedFromT2LengthID = registerSignal("dropped_t2_length");
 	sentToR1LengthID = registerSignal("sent_t1_length");
 	sentToR2LengthID = registerSignal("sent_t2_length");
+	freeBufferID = registerSignal("free_buffer");
 
 }
 
@@ -92,6 +93,7 @@ void BufferedRouter::handleMessage(cMessage *msg)
 					EV << "ROU1 adicionando mensagem ao buffer finito:" << msg->getName() << ". messageLength: " << messageLength << "; bufferedSize: " << bufferedSize << "; bufferSize: " << bufferSize;
 					//Armazenar a mensagem no buffer
 					queue.insert(msg);
+					emit(freeBufferID, (unsigned long)(bufferSize-bufferedSize));
 				}
 			}
 			else {
@@ -114,6 +116,7 @@ void BufferedRouter::handleMessage(cMessage *msg)
 				long messageLength = ((QoSMessage *)QoSMessageToSend)->getByteLength();
 				//Atualizar o contador de buffer
 				bufferedSize = bufferedSize - messageLength;
+				emit(freeBufferID, (unsigned long)(bufferSize-bufferedSize));
 			}
 
 			//Envia a mensagem

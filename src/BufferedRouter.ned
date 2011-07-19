@@ -35,6 +35,7 @@ simple BufferedRouter
         @statistic[dropped_t2_length] (title="Dropped from T2 Byte Length";record=vector);
         @statistic[sent_t1_length] (title="Sent to R1 Byte Length";record=vector);
         @statistic[sent_t2_length] (title="Sent to R2 Byte Length";record=vector);
+        @statistic[free_buffer] (title="Free space in buffer (bytes)";record=vector);
         
         
     gates:

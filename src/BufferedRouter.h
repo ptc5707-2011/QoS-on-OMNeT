@@ -41,6 +41,7 @@ class BufferedRouter : public cSimpleModule
 		simsignal_t droppedFromT2LengthID;	//Comprimento em bytes de drop de pacotes de T2 para R2
 		simsignal_t sentToR1LengthID;		//Comprimento em bytes de pacotes enviados de T1 para R1
 		simsignal_t sentToR2LengthID;		//Comprimento em bytes de pacotes enviados de T2 para R2
+		simsignal_t freeBufferID;			//Espaço livre no buffer em bytes.
 
 
 	protected:
