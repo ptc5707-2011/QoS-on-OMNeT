@@ -28,6 +28,7 @@ simple CBRNode like SourceNode
         
         //Estatísticas
         @statistic[sent_packet_length] (title="CBR Sent Packet Length";record=vector);
+        @statistic[sent_packet_seq] (title="CBR Sent Packet Sequence Number";record=vector);
 
     gates:
         output out1;   
