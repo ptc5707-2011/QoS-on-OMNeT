@@ -70,7 +70,6 @@ void BufferedRouter::handleMessage(cMessage *msg)
 				long messageLength = ((QoSMessage *)msg)->getByteLength();
 				//Se a mensagem for maior que o buffer disponível
 				if(messageLength+bufferedSize > bufferSize) {
-					delete(msg);
 					EV << "Mensagem descartada em ROU1:" << msg->getName() << ". messageLength: " << messageLength << "; bufferedSize: " << bufferedSize << "; bufferSize: " << bufferSize;
 
 					//Envio de sinais indicando perda de pacotes.
@@ -82,6 +81,8 @@ void BufferedRouter::handleMessage(cMessage *msg)
 						emit(droppedFromT2SeqID, (unsigned long)pkt->getSeqCount());
 						emit(droppedFromT2LengthID, (unsigned long)pkt->getByteLength());
 					}
+
+					delete(msg);
 
 				}
 				//Se a mensagem couber no buffer disponível
