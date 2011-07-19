@@ -38,12 +38,12 @@ network Network
             @display("p=533,216");
         }
         T1: <applicationNodeType> like SourceNode {
-            @display("p=72,65");
+            @display("p=72,65;i=device/pc3");
             from = "T1";
             to = "R1";
         }
         T2: <interferenceNodeType> like SourceNode {
-            @display("p=72,365");
+            @display("p=72,365;i=block/network");
             from = "T2";
             to = "R2";
         }
@@ -68,10 +68,9 @@ network Network
 //
 network FileInputTest
 {
-    
     parameters:
         string senderType;
-    
+
     submodules:
         T2: <senderType> like SourceNode {
             @display("p=88,88");
