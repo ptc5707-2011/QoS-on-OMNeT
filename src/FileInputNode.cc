@@ -173,7 +173,7 @@ void FileInputNode::handleMessage(cMessage *msg)
 
 		scheduleAt(simTime() + next_packet_timestamp.schedule_at, next_pkt);
 		} else {
-			//TODO: EMITIR SINAL PARA PARAR
+			//TODO: EMITIR SINAL PARA PARAR A SIMULAÇÃO
 		}
 }
 
