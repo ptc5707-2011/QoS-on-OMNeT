@@ -55,10 +55,10 @@ network Network
         }
     connections:
 
-        T1.out1 --> IdealChannel --> ROU1.in1;
-        T2.out1 --> IdealChannel --> ROU1.in2;
         ROU2.out1 --> IdealChannel --> R1.in1;
         ROU2.out2 --> IdealChannel --> R2.in1;
+        T1.out1 --> IdealChannel --> ROU1.in++;
+        T2.out1 --> IdealChannel --> ROU1.in++;
         ROU1.out1 --> DatarateChannel {  delay = link_delay; datarate = link_datarate; } --> ROU2.in1;
 }
 //

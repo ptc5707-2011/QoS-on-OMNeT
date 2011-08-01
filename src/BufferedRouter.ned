@@ -39,7 +39,6 @@ simple BufferedRouter
         
         
     gates:
-        input in1;
-        input in2;
+        input in[];
         output out1;
 }

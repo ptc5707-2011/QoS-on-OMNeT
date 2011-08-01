@@ -15,6 +15,12 @@
 
 Define_Module(BufferedRouter);
 
+
+cGate* BufferedRouter::getGateFromTable(QoSMessage *pkt) {
+
+	return gate("out1");
+}
+
 void BufferedRouter::initialize()
 {
 	next = new cMessage("Buffered Router Next");
@@ -41,10 +47,20 @@ void BufferedRouter::initialize()
 
 void BufferedRouter::handleMessage(cMessage *msg)
 {
-	cGate *outGate = gate("out1");
-	cChannel *txChannel = outGate->getChannel();
+	cGate *outGate;
+	cChannel *txChannel;
+	QoSMessage *pkt;
+
 	//Se não é uma mensagem interna (ou seja, é um pacote)
 	if(!msg->isSelfMessage()) {
+
+		//Transforma a mensagem cMessage em pacote QoSMessage;
+		pkt = (QoSMessage *)msg;
+		//Obtem o gate de envio a partir da tabela de roteamento
+		outGate = getGateFromTable(pkt);
+		//Obtem o canal de envio a partir do gate de envio.
+		txChannel = outGate->getChannel();
+
 		//Se o canal está livre
 		if(!txChannel->isBusy()) {
 			//Envia a mensagem
@@ -52,7 +68,6 @@ void BufferedRouter::handleMessage(cMessage *msg)
 			send(msg, outGate);
 
 			//Envio de sinais indicando envio de mensagens
-			QoSMessage *pkt = (QoSMessage *)msg;
 			if(strcmp(pkt->getTo(), "R1")==0) {
 				emit(sentToR1SeqID, (unsigned long)pkt->getSeqCount());
 				emit(sentToR1LengthID, (unsigned long)pkt->getByteLength());
@@ -68,13 +83,12 @@ void BufferedRouter::handleMessage(cMessage *msg)
 		else {
 			if(isFinite) {
 				//Obter o tamanho da mensagem.
-				long messageLength = ((QoSMessage *)msg)->getByteLength();
+				long messageLength = pkt->getByteLength();
 				//Se a mensagem for maior que o buffer disponível
 				if(messageLength+bufferedSize > bufferSize) {
 					EV << "Mensagem descartada em ROU1:" << msg->getName() << ". messageLength: " << messageLength << "; bufferedSize: " << bufferedSize << "; bufferSize: " << bufferSize;
 
 					//Envio de sinais indicando perda de pacotes.
-					QoSMessage *pkt = (QoSMessage *)msg;
 					if(strcmp(pkt->getFrom(), "T1")==0) {
 						emit(droppedFromT1SeqID, (unsigned long)pkt->getSeqCount());
 						emit(droppedFromT1LengthID, (unsigned long)pkt->getByteLength());
@@ -119,6 +133,10 @@ void BufferedRouter::handleMessage(cMessage *msg)
 				emit(freeBufferID, (unsigned long)(bufferSize-bufferedSize));
 			}
 
+			//Obtem o gate de envio a partir da tabela de roteamento
+			outGate = getGateFromTable(QoSMessageToSend);
+			//Obtem o canal de envio a partir do gate de envio.
+			txChannel = outGate->getChannel();
 			//Envia a mensagem
 			EV << "ROU1 encaminha mensagem retirada do buffer '"<< QoSMessageToSend->getName() <<"'";
 			send(QoSMessageToSend, outGate);

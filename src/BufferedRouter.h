@@ -32,6 +32,8 @@ class BufferedRouter : public cSimpleModule
 		long bufferSize;
 		long bufferedSize;
 
+		cGate* getGateFromTable(QoSMessage *pkt);
+
 		//Sinais
 		simsignal_t droppedFromT1SeqID; 	//Seq number de drop de pacotes de T1 pra R1
 		simsignal_t droppedFromT2SeqID;		//Seq number de drop de pacotes de T2 para R2
@@ -47,6 +49,7 @@ class BufferedRouter : public cSimpleModule
 	protected:
 		virtual void initialize();
 		virtual void handleMessage(cMessage *msg);
+
 };
 
 #endif
