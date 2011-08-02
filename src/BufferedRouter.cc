@@ -83,8 +83,6 @@ cGate* BufferedRouter::getGateFromTable(QoSMessage *pkt) {
 
 	//Obter o próximo hop, consultando a tabela de roteamento.
 	it = routingTable.find(destination);
-	EV << "key: " << destination << endl;
-	EV << "value: " << (it->second) << endl;
 
 	if(it != routingTable.end()) {
 		next_hop = (it->second).c_str();
@@ -98,8 +96,6 @@ cGate* BufferedRouter::getGateFromTable(QoSMessage *pkt) {
 	//Obter gate conectado ao next hop.
 	for(int i = 0; i < gateSize("out"); i++) {
 		cGate *gate_i = gate("out", i);
-		EV << "gate_i: " << gate_i->getName() << endl;
-		EV << "gate_i end: " << gate_i->getPathEndGate()->getOwner()->getName() << endl;
 		if(strcmp(gate_i->getPathEndGate()->getOwner()->getName(),next_hop) == 0) {
 			gateFound = true;
 			outGate = gate_i;
@@ -111,14 +107,18 @@ cGate* BufferedRouter::getGateFromTable(QoSMessage *pkt) {
 		error("Message bound to %s, but could not find connection between %s and %s", destination, this->getName(), destination);
 	}
 
-	EV << "out gate: " << outGate->getName() << endl;
 
 	return outGate;
 }
 
 void BufferedRouter::initialize()
 {
-	next = new cMessage("Buffered Router Next");
+
+	for(int i = 0; i < gateSize("out"); i++) {
+		next.push_back(new cMessage("router next msg"));
+	}
+
+
 	isFinite = par("isFinite").boolValue();
 	bufferSize = par("bufferSize").longValue();
 	bufferedSize = 0;
@@ -175,7 +175,7 @@ void BufferedRouter::handleMessage(cMessage *msg)
 			}
 
 			//Agenda o próximo envio para o instante que o envio atual terminar
-			scheduleAt(simTime()+txChannel->calculateDuration(msg), next);
+			scheduleAt(simTime()+txChannel->calculateDuration(msg), next[outGate->getIndex()]);
 		}
 		//Se o canal não está livre
 		else {
@@ -249,7 +249,7 @@ void BufferedRouter::handleMessage(cMessage *msg)
 				emit(sentToR2LengthID, (unsigned long)pkt->getByteLength());
 			}
 			//Agenda o próximo envio para o instante que o envio atual terminar
-			scheduleAt(simTime()+txChannel->calculateDuration(QoSMessageToSend), next);
+			scheduleAt(simTime()+txChannel->calculateDuration(QoSMessageToSend), next[outGate->getIndex()]);
 		}
 	}
 }

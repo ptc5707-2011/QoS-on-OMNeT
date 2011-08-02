@@ -30,7 +30,8 @@ class BufferedRouter : public cSimpleModule
 
 	private:
 		cQueue queue;
-		cMessage *next;
+		std::vector<cMessage *> next;
+
 		bool isFinite;
 		long bufferSize;
 		long bufferedSize;
