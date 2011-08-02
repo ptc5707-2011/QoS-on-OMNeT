@@ -20,18 +20,17 @@ Define_Module(BufferedRouter);
 void BufferedRouter::fillTableFromFile(){
 
 	std::ifstream inputFile;
-	std::stringstream filename_string;
+	const char *filename;
 	std::string line;
-
 	const char *token;
 
 	//Obter o nome do arquivo de roteamento a partir do nome do módulo
-	filename_string << "input/" << this->getName() << ".routing";
+	filename = par("routingFile").stringValue();
 
 	//Abrir o arquivo
-	inputFile.open(filename_string.str().c_str());
+	inputFile.open(filename);
 	if(!inputFile.is_open()) {
-		error("Routing file %s for %s could not be opened", filename_string.str().c_str(), this->getName());
+		error("Routing file %s for %s could not be opened", filename, this->getName());
 	}
 
 	//Pegar a primeira linha, deve conter o caminho padrão
@@ -49,10 +48,10 @@ void BufferedRouter::fillTableFromFile(){
 			}
 
 		} else {
-			error("Default gate not defined in file %s", filename_string.str().c_str());
+			error("Default gate not defined in file %s", filename);
 		}
 	} else {
-		error("Could not read first line of %s", filename_string.str().c_str());
+		error("Could not read first line of %s", filename);
 	}
 
 	//Processar o arquivo.
@@ -77,10 +76,10 @@ void BufferedRouter::fillTableFromFile(){
 
 cGate* BufferedRouter::getGateFromTable(QoSMessage *pkt) {
 
-	cGate *outGate = gate("out1");
-
 	const char *destination = pkt->getTo();
 	const char *next_hop;
+	cGate *outGate;
+	bool gateFound = false;
 
 	//Obter o próximo hop, consultando a tabela de roteamento.
 	it = routingTable.find(destination);
@@ -90,9 +89,19 @@ cGate* BufferedRouter::getGateFromTable(QoSMessage *pkt) {
 		next_hop = (routingTable["default"]).c_str();
 	}
 
-	EV << next_hop << "\n";
+	//Obter gate conectado ao next hop.
+	for(int i = 0; i < gateSize("out"); i++) {
+		cGate *gate_i = gate("out", i);
+		if(strcmp(gate_i->getPathEndGate()->getName(),next_hop)) {
+			gateFound = true;
+			outGate = gate_i;
+			break;
+		}
+	}
 
-
+	if(!gateFound) {
+		error("Message bound to %s, but could not find connection between %s and %s", destination, this->getName(), destination);
+	}
 
 	return outGate;
 }

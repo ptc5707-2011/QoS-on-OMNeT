@@ -24,6 +24,7 @@ simple BufferedRouter
         bool isFinite;
         int bufferSize @unit(byte);
         @display("i=abstract/router");
+        string routingFile;
         
         //Estatísticas
         @statistic[sent_packet_length] (title="CBR Sent Packet Length";record=vector);
@@ -40,5 +41,5 @@ simple BufferedRouter
         
     gates:
         input in[];
-        output out1;
+        output out[];
 }
