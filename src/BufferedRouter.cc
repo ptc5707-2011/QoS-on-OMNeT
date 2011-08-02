@@ -83,16 +83,24 @@ cGate* BufferedRouter::getGateFromTable(QoSMessage *pkt) {
 
 	//Obter o próximo hop, consultando a tabela de roteamento.
 	it = routingTable.find(destination);
+	EV << "key: " << destination << endl;
+	EV << "value: " << (it->second) << endl;
+
 	if(it != routingTable.end()) {
 		next_hop = (it->second).c_str();
 	} else {
 		next_hop = (routingTable["default"]).c_str();
 	}
 
+
+	EV << "next hop: " << next_hop << endl;
+
 	//Obter gate conectado ao next hop.
 	for(int i = 0; i < gateSize("out"); i++) {
 		cGate *gate_i = gate("out", i);
-		if(strcmp(gate_i->getPathEndGate()->getName(),next_hop)) {
+		EV << "gate_i: " << gate_i->getName() << endl;
+		EV << "gate_i end: " << gate_i->getPathEndGate()->getOwner()->getName() << endl;
+		if(strcmp(gate_i->getPathEndGate()->getOwner()->getName(),next_hop) == 0) {
 			gateFound = true;
 			outGate = gate_i;
 			break;
@@ -102,6 +110,8 @@ cGate* BufferedRouter::getGateFromTable(QoSMessage *pkt) {
 	if(!gateFound) {
 		error("Message bound to %s, but could not find connection between %s and %s", destination, this->getName(), destination);
 	}
+
+	EV << "out gate: " << outGate->getName() << endl;
 
 	return outGate;
 }
