@@ -16,9 +16,85 @@
 Define_Module(BufferedRouter);
 
 
+
+void BufferedRouter::fillTableFromFile(){
+
+	std::ifstream inputFile;
+	std::stringstream filename_string;
+	std::string line;
+
+	const char *token;
+
+	//Obter o nome do arquivo de roteamento a partir do nome do módulo
+	filename_string << "input/" << this->getName() << ".routing";
+
+	//Abrir o arquivo
+	inputFile.open(filename_string.str().c_str());
+	if(!inputFile.is_open()) {
+		error("Routing file %s for %s could not be opened", filename_string.str().c_str(), this->getName());
+	}
+
+	//Pegar a primeira linha, deve conter o caminho padrão
+	if(getline(inputFile, line)) {
+
+		cStringTokenizer tokenizer = cStringTokenizer(line.c_str());
+		token = tokenizer.nextToken();
+		//Primeira palavra da primeira linha deve ser default
+		if(strcmp(token, "default") == 0) {
+			if(tokenizer.hasMoreTokens()) {
+				routingTable["default"] = tokenizer.nextToken();
+			}
+			else {
+				error("No routing information provided for default gate");
+			}
+
+		} else {
+			error("Default gate not defined in file %s", filename_string.str().c_str());
+		}
+	} else {
+		error("Could not read first line of %s", filename_string.str().c_str());
+	}
+
+	//Processar o arquivo.
+	while(getline(inputFile, line)) {
+		cStringTokenizer tokenizer = cStringTokenizer(line.c_str());
+		if(tokenizer.hasMoreTokens()) {
+			token = tokenizer.nextToken();
+			if(tokenizer.hasMoreTokens()) {
+				routingTable[token] = tokenizer.nextToken();
+			} else {
+				error("Could not parse line %s", line.c_str());
+			}
+		} else {
+			error("Could not parse line %s", line.c_str());
+		}
+	}
+
+	//Fechar o arquivo
+	inputFile.close();
+}
+
+
 cGate* BufferedRouter::getGateFromTable(QoSMessage *pkt) {
 
-	return gate("out1");
+	cGate *outGate = gate("out1");
+
+	const char *destination = pkt->getTo();
+	const char *next_hop;
+
+	//Obter o próximo hop, consultando a tabela de roteamento.
+	it = routingTable.find(destination);
+	if(it != routingTable.end()) {
+		next_hop = (it->second).c_str();
+	} else {
+		next_hop = (routingTable["default"]).c_str();
+	}
+
+	EV << next_hop << "\n";
+
+
+
+	return outGate;
 }
 
 void BufferedRouter::initialize()
@@ -31,6 +107,9 @@ void BufferedRouter::initialize()
 	EV << "Buffer size: " << bufferSize << "\n";
 	EV << "Is finite? " << isFinite << "\n";
 	EV << "Buffered size: " << bufferedSize << "\n";
+
+	//Obter tabela de roteamento a partir de um arquivo
+	fillTableFromFile();
 
 	//Registro de sinais
 	droppedFromT1SeqID = registerSignal("dropped_t1_seq");

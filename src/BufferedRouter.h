@@ -18,6 +18,9 @@
 
 #include <omnetpp.h>
 #include "QoSMessage_m.h"
+#include <iostream>
+#include <fstream>
+#include <string>
 
 /**
  * TODO - Generated class
@@ -31,8 +34,12 @@ class BufferedRouter : public cSimpleModule
 		bool isFinite;
 		long bufferSize;
 		long bufferedSize;
+		std::map<std::string, std::string> routingTable;
+		std::map<std::string, std::string>::iterator it;
+
 
 		cGate* getGateFromTable(QoSMessage *pkt);
+		void fillTableFromFile();
 
 		//Sinais
 		simsignal_t droppedFromT1SeqID; 	//Seq number de drop de pacotes de T1 pra R1
