@@ -37,8 +37,8 @@ void CBRNode::handleMessage(cMessage *msg)
 
 
 	QoSMessage *pkt = new QoSMessage();
-	pkt->setFrom("T1");
-	pkt->setTo("R1");
+	pkt->setFrom(par("from").stringValue());
+	pkt->setTo(par("to").stringValue());
 	pkt->setByteLength(bytesPerPacket);
 	pkt->setSeqCount(seqcounter);
 
