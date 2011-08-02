@@ -59,7 +59,7 @@ network Network
         ROU2.out2 --> IdealChannel --> R2.in1;
         T1.out1 --> IdealChannel --> ROU1.in++;
         T2.out1 --> IdealChannel --> ROU1.in++;
-        ROU1.out++ --> DatarateChannel { datarate=link_datarate; delay=link_delay; }--> ROU2.in1;
+        ROU1.out++ --> DatarateChannel {  datarate = link_datarate; delay = link_delay; } --> ROU2.in1;
 }
 //
 // TODO documentation
@@ -82,3 +82,57 @@ network FileInputTest
         T2.out1 --> IdealChannel --> R2.in1;
 }
 
+
+network RoutingTest
+{
+    parameters:
+        @display("bgb=693,373");
+        double link_delay @unit(s);
+        double link_datarate @unit(bps);
+
+
+    submodules:
+        ROU1: BufferedRouter {
+            @display("p=79,175");
+        }
+        ROU5: BufferedRouter {
+            @display("p=398,247");
+        }
+        ROU2: BufferedRouter {
+            @display("p=209,93");
+        }
+        ROU3: BufferedRouter {
+            @display("p=209,247");
+        }
+        ROU4: BufferedRouter {
+            @display("p=398,93");
+        }
+        ROU6: BufferedRouter {
+            @display("p=540,175");
+        }
+        APP1: CBRNode {
+            @display("p=34,54");
+        }
+        APP2: CBRNode {
+            @display("p=34,283");
+        }
+        SINK1: Receiver {
+            @display("p=625,54");
+        }
+        SINK2: Receiver {
+            @display("p=625,283");
+        }
+    connections:
+        ROU1.out++ --> DatarateChannel {  datarate = link_datarate; delay = link_delay; } --> ROU2.in++;
+        ROU1.out++ --> DatarateChannel {  datarate = link_datarate; delay = link_delay; } --> ROU3.in++;
+        ROU2.out++ --> DatarateChannel {  datarate = link_datarate; delay = link_delay; } --> ROU5.in++;
+        ROU3.out++ --> DatarateChannel {  datarate = link_datarate; delay = link_delay; } --> ROU4.in++;
+        ROU2.out++ --> DatarateChannel {  datarate = link_datarate; delay = link_delay; } --> ROU4.in++;
+        ROU3.out++ --> DatarateChannel {  datarate = link_datarate; delay = link_delay; } --> ROU5.in++;
+        ROU4.out++ --> DatarateChannel {  datarate = link_datarate; delay = link_delay; } --> ROU6.in++;
+        ROU5.out++ --> DatarateChannel {  datarate = link_datarate; delay = link_delay; } --> ROU6.in++;
+        APP1.out1 --> IdealChannel --> ROU1.in++;
+        APP2.out1 --> IdealChannel --> ROU1.in++;
+        ROU6.out++ --> IdealChannel --> SINK1.in1;
+        ROU6.out++ --> IdealChannel --> SINK2.in1;
+}
