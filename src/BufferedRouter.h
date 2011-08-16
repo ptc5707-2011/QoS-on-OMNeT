@@ -21,6 +21,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "RManager.h"
 
 /**
  * TODO - Generated class

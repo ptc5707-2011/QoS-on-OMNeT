@@ -57,3 +57,22 @@ Sobre o módulo FileInputNode:
 	a maiúsculas/minúsculas, ou seja, devem ser exatamente iguais aos nomes
 	usados nos arquivos .ned que definem a topologia da rede.
 	
+=======================
+Sobre a classe RManager
+	
+##########################
+vector<double> RManager::file2vector(const char* filename)
+Converte um arquivo texto para um vetor de doubles. O arquivo texto deve ter o seguinte formato: 1 linha por valor de ponto flutuante, com . (ponto) como separador, ex:
+
+2.34
+0.2
+5.0
+0.001
+<etc>
+#########################
+void RManager::vector2file(vector<double> input_vector, const char* output_filename)
+O "contrário" de file2vector, converte um vetor de doubles para um arquivo texto, 1 linha por valor, ponto flutuante
+
+#########################
+void RManager::source_file(const char* filename)
+Executa um script R com o executável do R.
