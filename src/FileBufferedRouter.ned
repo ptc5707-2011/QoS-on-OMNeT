@@ -20,8 +20,8 @@ module FileBufferedRouter
     parameters:
         int bufferSize @unit(byte);
         string routingFile;
-        @display("bgb=406,225");
-        
+        @display("bgb=406,225;i=abstract/router");
+
     gates:
         input in[];
         output out[];
