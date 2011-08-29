@@ -31,10 +31,14 @@ network Network
         string interferenceNodeType;
 
     submodules:
-        ROU1: BufferedRouter {
+        ROU1: FileBufferedRouter {
             @display("p=179,216");
+            @statistic[sent_seq_R2](title="Test Seq R2"; record=vector);
+            @statistic[sent_seq_R1](title="Test Seq R1"; record=vector);
+            @statistic[sent_len_R2](title="Test Len R2"; record=vector);
+            @statistic[sent_len_R1](title="Test Len R1"; record=vector);
         }
-        ROU2: IdealRouter {
+        ROU2: FileBufferedRouter {
             @display("p=533,216");
         }
         T1: <applicationNodeType> like SourceNode {
@@ -55,11 +59,11 @@ network Network
         }
     connections:
 
-        ROU2.out1 --> IdealChannel --> R1.in1;
-        ROU2.out2 --> IdealChannel --> R2.in1;
+        ROU2.out++ --> IdealChannel --> R1.in1;
+        ROU2.out++ --> IdealChannel --> R2.in1;
         T1.out1 --> IdealChannel --> ROU1.in++;
         T2.out1 --> IdealChannel --> ROU1.in++;
-        ROU1.out++ --> DatarateChannel {  datarate = link_datarate; delay = link_delay; } --> ROU2.in1;
+        ROU1.out++ --> DatarateChannel {  datarate = link_datarate; delay = link_delay; } --> ROU2.in++;
 }
 //
 // TODO documentation
@@ -92,22 +96,22 @@ network RoutingTest
 
 
     submodules:
-        ROU1: BufferedRouter {
+        ROU1: FileBufferedRouter {
             @display("p=79,175");
         }
-        ROU5: BufferedRouter {
+        ROU5: FileBufferedRouter {
             @display("p=398,247");
         }
-        ROU2: BufferedRouter {
+        ROU2: FileBufferedRouter {
             @display("p=209,93");
         }
-        ROU3: BufferedRouter {
+        ROU3: FileBufferedRouter {
             @display("p=209,247");
         }
-        ROU4: BufferedRouter {
+        ROU4: FileBufferedRouter {
             @display("p=398,93");
         }
-        ROU6: BufferedRouter {
+        ROU6: FileBufferedRouter {
             @display("p=540,175");
         }
         APP1: CBRNode {
@@ -136,3 +140,114 @@ network RoutingTest
         ROU6.out++ --> IdealChannel --> SINK1.in1;
         ROU6.out++ --> IdealChannel --> SINK2.in1;
 }
+
+network FifoQueueTest
+{
+    parameters:
+        double link_delay @unit(s);
+        double link_datarate @unit(bps);
+
+        @display("bgb=364,204");
+    submodules:
+        FIFO: FifoQueue {
+            @display("p=124,92");
+        }
+        CBR1: CBRNode {
+            @display("p=29,92");
+        }
+        RECEIVER: Receiver {
+            @display("p=237,92");
+        }
+    connections:
+        CBR1.out1 --> FIFO.in;
+        FIFO.out --> DatarateChannel {  datarate = link_datarate; delay = link_delay; } --> RECEIVER.in1;
+}
+
+//
+// TODO documentation
+//
+// @author hugo
+//
+network FileRouterTest
+{
+    @display("bgb=463,383");
+    submodules:
+        fileRouter: FileRouter {
+            @display("p=192,157");
+        }
+        CBR1: CBRNode {
+            @display("p=44,74");
+        }
+        CBR2: CBRNode {
+            @display("p=44,157");
+        }
+        CBR3: CBRNode {
+            @display("p=44,243");
+        }
+        R1: Receiver {
+            @display("p=314,74");
+        }
+        R2: Receiver {
+            @display("p=314,157");
+        }
+        R3: Receiver {
+            @display("p=314,243");
+        }
+    connections:
+        CBR1.out1 --> fileRouter.in++;
+        CBR2.out1 --> fileRouter.in++;
+        CBR3.out1 --> fileRouter.in++;
+        fileRouter.out++ --> R1.in1;
+        fileRouter.out++ --> R2.in1;
+        fileRouter.out++ --> R3.in1;
+}
+
+//
+// TODO documentation
+//
+// @author hugo
+//
+network FileBufferedRouterTest
+{
+    
+    
+    parameters:
+        double link_delay @unit(s);
+        double link_datarate @unit(bps);
+        
+        @display("bgb=470,265");
+    submodules:
+        FBROUTER2: FileBufferedRouter {
+            @display("p=160,173");
+        }
+        CBR2: CBRNode {
+            @display("p=45,113");
+        }
+        CBR3: CBRNode {
+            @display("p=45,181");
+        }
+        FBROUTER1: FileBufferedRouter {
+            @display("p=160,74");
+        }
+        CBR1: CBRNode {
+            @display("p=45,42");
+        }
+        R1: Receiver {
+            @display("p=406,74");
+        }
+        R2: Receiver {
+            @display("p=406,173");
+        }
+        FBROUTER3: FileBufferedRouter {
+            @display("p=278,113");
+        }
+    connections:
+        CBR1.out1 --> FBROUTER1.in++;
+        CBR2.out1 --> FBROUTER1.in++;
+        CBR3.out1 --> FBROUTER2.in++;
+        FBROUTER1.out++ --> DatarateChannel { datarate = link_datarate; delay = link_delay; } --> FBROUTER3.in++;
+        FBROUTER2.out++ --> DatarateChannel { datarate = link_datarate; delay = link_delay; } --> FBROUTER3.in++;
+        FBROUTER3.out++ --> DatarateChannel { datarate = link_datarate; delay = link_delay; } --> R1.in1;
+        FBROUTER3.out++ --> DatarateChannel { datarate = link_datarate; delay = link_delay; } --> R2.in1;
+}
+

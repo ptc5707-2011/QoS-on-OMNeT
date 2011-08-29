@@ -28,6 +28,7 @@ class Receiver : public cSimpleModule
 	private:
 	simsignal_t lengthSignalID;
 	simsignal_t seqSignalID;
+	simsignal_t delaySignalID;
 
 	protected:
 		virtual void initialize();

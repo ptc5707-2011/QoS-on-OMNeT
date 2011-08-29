@@ -22,6 +22,7 @@ void Receiver::initialize()
     //Registrar sinais
 	lengthSignalID = registerSignal("received_packet_length");
 	seqSignalID = registerSignal("received_packet_seq");
+	delaySignalID = registerSignal("packet_delay");
 }
 
 void Receiver::handleMessage(cMessage *msg)
@@ -29,6 +30,7 @@ void Receiver::handleMessage(cMessage *msg)
 	EV << this->getName() << " recebeu '" << msg->getName() << "'";
 	QoSMessage *pkt = (QoSMessage *)msg;
 
+	emit(delaySignalID, (pkt->getArrivalTime()-pkt->getCreationTime()));
 	emit(lengthSignalID, (unsigned long)pkt->getByteLength());
 	emit(seqSignalID, (unsigned long)pkt->getSeqCount());
 

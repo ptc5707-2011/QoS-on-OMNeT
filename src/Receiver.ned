@@ -25,6 +25,7 @@ simple Receiver
         //Estatísticas
         @statistic[received_packet_length] (title="Received packet length";record=vector);
         @statistic[received_packet_seq] (title="Received packet sequence number";record=vector);
+        @statistic[packet_delay] (title="Received packet delay";record=vector);
          
     gates:
         input in1;
