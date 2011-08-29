@@ -45,14 +45,10 @@ Sobre o módulo FileInputNode:
 	O caminho deste arquivo deve ser configurado no parâmetro routingFile
 	de BufferedRouter. O formato deste arquivo é o seguinte:
 	
-	default <NÓ_PADRÃO>
 	<DESTINO> <NEXT_HOP>
 	<DESTINO> <NEST_HOP>
 	
-	Ou seja, a primeira linha deve ter a palavra "default", seguido do nó
-	padrão, para o qual as mensagens devem ser enviadas caso não seja especificada
-	uma rota para o destino.
-	As linhas seguintes devem ter o nó de destino seguido do next hop para 
+	Cada linha deve ter o nó de destino seguido do next hop para 
 	alcançar este destino. Notar que todos os parâmetros são sensíveis
 	a maiúsculas/minúsculas, ou seja, devem ser exatamente iguais aos nomes
 	usados nos arquivos .ned que definem a topologia da rede.
