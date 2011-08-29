@@ -118,7 +118,7 @@ void FileRouter::handleMessage(cMessage *msg)
     } else {
     	EV << this->getName() << " descartando mensagem pois não foi encontrada uma rota para " << pkt->getTo() << "\n";
     	emit(droppedSeqSignalID, pkt->getSeqCount());
-    	emit(droppedLenSignalID, pkt->getByteLength());
+    	emit(droppedLenSignalID, (unsigned long)pkt->getByteLength());
     	delete pkt;
     }
 

@@ -33,11 +33,11 @@ void Receiver::handleMessage(cMessage *msg)
 
 
 	QoSMessage *pkt = (QoSMessage *)msg;
-	EV << this->getName() << " recebeu '" << msg->getName() << "': " << pkt->getSeqCount() << "\n";
+	EV << this->getName() << " recebeu '" << msg->getName() << "\n";
 
 	if(!(next_seq == pkt->getSeqCount())) {
 		for(unsigned long i = next_seq; i < pkt->getSeqCount(); i++) {
-			EV << this->getName() << " detectou perda do pacote '" << msg->getName() << "': " << i <<"\n";
+			EV << this->getName() << " detectou perda do pacote '" << msg->getName() <<"\n";
 			emit(delaySignalID, 0);
 			emit(lengthSignalID, 0);
 			emit(seqSignalID, i);
