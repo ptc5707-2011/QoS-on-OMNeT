@@ -131,6 +131,7 @@ void FileInputNode::initialize()
 	first_pkt->setTo(par("to").stringValue());
 	first_pkt->setSeqCount(1);
 	first_pkt->setByteLength(parsed_line.byteLength);
+	EV << this->getName() << " enviando pacote '" << first_pkt->getName() << "\n";
 	send(first_pkt,"out1");
 	emit(lengthSignalID, (unsigned long)first_pkt->getByteLength());
 	emit(seqSignalID, (unsigned long)first_pkt->getSeqCount());
@@ -156,6 +157,7 @@ void FileInputNode::handleMessage(cMessage *msg)
 {
 
 	seqcounter++;
+	EV << this->getName() << " enviando pacote '" << msg->getName() << "\n";
 	send(msg, "out1");
 	emit(lengthSignalID, (unsigned long)((QoSMessage *)msg)->getByteLength());
 	emit(seqSignalID, (unsigned long)((QoSMessage *)msg)->getSeqCount());
