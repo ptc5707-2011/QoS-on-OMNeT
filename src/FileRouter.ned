@@ -19,6 +19,8 @@ simple FileRouter
 {
     parameters:
         string routingFile;
+        @statistic[dropped_no_route_seq](title="Dropped sequence number, no route"; record=vector);
+        @statistic[dropped_no_route_len](title="Dropped byte length, no route"; record=vector);
         
     gates:
         input in[];

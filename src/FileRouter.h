@@ -30,6 +30,9 @@ class FileRouter : public cSimpleModule
     std::map<std::string, std::string> routingTable;
     std::map<std::string, std::string>::iterator it;
 
+    simsignal_t droppedSeqSignalID;
+    simsignal_t droppedLenSignalID;
+
     void fillTableFromFile();
     cGate* getGateFromTable(QoSMessage *pkt);
 };

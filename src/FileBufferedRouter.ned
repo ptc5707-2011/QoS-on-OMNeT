@@ -20,7 +20,7 @@ module FileBufferedRouter
     parameters:
         int bufferSize @unit(byte);
         string routingFile;
-        @display("bgb=406,225;i=abstract/router");
+        @display("bgb=406,225;i=abstract/router;bgl=2");
 
     gates:
         input in[];
@@ -28,7 +28,7 @@ module FileBufferedRouter
 
     submodules:
         queue[sizeof(out)]: FifoQueue {
-            @display("p=312,111");
+            @display("p=312,111,c");
             buffer_length = bufferSize;
         }
 

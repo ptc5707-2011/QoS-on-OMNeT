@@ -19,20 +19,38 @@ Define_Module(Receiver);
 
 void Receiver::initialize()
 {
+
+	next_seq = 1;
     //Registrar sinais
 	lengthSignalID = registerSignal("received_packet_length");
 	seqSignalID = registerSignal("received_packet_seq");
 	delaySignalID = registerSignal("packet_delay");
+	receivedOrDroppedSignalID = registerSignal("received_or_dropped"); //Received = 1, dropped = 0
 }
 
 void Receiver::handleMessage(cMessage *msg)
 {
-	EV << this->getName() << " recebeu '" << msg->getName() << "'";
+
+
 	QoSMessage *pkt = (QoSMessage *)msg;
+	EV << this->getName() << " recebeu '" << msg->getName() << "': " << pkt->getSeqCount() << "\n";
+
+	if(!(next_seq == pkt->getSeqCount())) {
+		for(unsigned long i = next_seq; i < pkt->getSeqCount(); i++) {
+			EV << this->getName() << " detectou perda do pacote '" << msg->getName() << "': " << i <<"\n";
+			emit(delaySignalID, 0);
+			emit(lengthSignalID, 0);
+			emit(seqSignalID, i);
+			emit(receivedOrDroppedSignalID, 0);
+		}
+	}
 
 	emit(delaySignalID, (pkt->getArrivalTime()-pkt->getCreationTime()));
 	emit(lengthSignalID, (unsigned long)pkt->getByteLength());
 	emit(seqSignalID, (unsigned long)pkt->getSeqCount());
+	emit(receivedOrDroppedSignalID, 1);
+
+	next_seq = pkt->getSeqCount()+1;
 
 	delete(msg);
 }
