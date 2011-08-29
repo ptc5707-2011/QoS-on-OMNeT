@@ -43,14 +43,14 @@ void CBRNode::handleMessage(cMessage *msg)
 	pkt->setSeqCount(seqcounter);
 
 	std::stringstream messageName;
-	messageName << "CBR message, seq: " << seqcounter;
+	messageName << this->getName() << " message, seq: " << seqcounter;
 	pkt->setName(messageName.str().c_str());
 
 
 	emit(lengthSignalID, (unsigned long)pkt->getByteLength());
 	emit(seqSignalID, (unsigned long)pkt->getSeqCount());
 
-	EV << this->getName() << "enviando mensagem '"<< pkt->getName() <<"'";
+	EV << this->getName() << " enviando mensagem '"<< pkt->getName() <<"'";
 	send(pkt, "out1");
 	scheduleAt(simTime()+timeBetweenPackets, next);
 }

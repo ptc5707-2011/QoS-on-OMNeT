@@ -110,13 +110,13 @@ void FileRouter::handleMessage(cMessage *msg)
     pkt = (QoSMessage *) msg;
     outGate = getGateFromTable(pkt);
 
-	EV << this->getName() << " recebeu '" << msg->getName() << "': " << pkt->getSeqCount() << "\n";
+	EV << this->getFullPath() << " recebeu '" << msg->getName() << "\n";
 
     if(outGate) {
-    	EV << this->getName() << " encaminhando mensagem por: " << outGate->getName() << "\n";
+    	EV << this->getFullPath() << " encaminhando mensagem por: " << outGate->getFullPath() << "\n";
     	send(pkt, outGate);
     } else {
-    	EV << this->getName() << " descartando mensagem pois não foi encontrada uma rota para " << pkt->getTo() << "\n";
+    	EV << this->getFullPath() << " descartando mensagem pois não foi encontrada uma rota para " << pkt->getTo() << "\n";
     	emit(droppedSeqSignalID, pkt->getSeqCount());
     	emit(droppedLenSignalID, (unsigned long)pkt->getByteLength());
     	delete pkt;

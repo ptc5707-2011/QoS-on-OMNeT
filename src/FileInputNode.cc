@@ -126,7 +126,11 @@ void FileInputNode::initialize()
 
 	seqcounter++;
 	//Construir o primeiro pacote e enviar
-	first_pkt->setName("File message, seq: 1");
+
+	std::stringstream messageName;
+	messageName << this->getName() << " message, seq: " << seqcounter;
+
+	first_pkt->setName(messageName.str().c_str());
 	first_pkt->setFrom(par("from").stringValue());
 	first_pkt->setTo(par("to").stringValue());
 	first_pkt->setSeqCount(1);
@@ -143,7 +147,11 @@ void FileInputNode::initialize()
 	if(!next_packet_timestamp.stop) {
 		seqcounter++;
 		QoSMessage * next_pkt = new QoSMessage();
-		next_pkt->setName("File message, seq: 2");
+
+		messageName.str("");
+		messageName << this->getName() << " message, seq: " << seqcounter;
+
+		next_pkt->setName(messageName.str().c_str());
 		next_pkt->setFrom(par("from").stringValue());
 		next_pkt->setTo(par("to").stringValue());
 		next_pkt->setSeqCount(seqcounter);
@@ -168,7 +176,7 @@ void FileInputNode::handleMessage(cMessage *msg)
 		QoSMessage * next_pkt = new QoSMessage();
 
 		std::stringstream messageName;
-		messageName << "File message, seq: " << seqcounter;
+		messageName << this->getName() << " message, seq: " << seqcounter;
 
 		next_pkt->setName(messageName.str().c_str());
 		next_pkt->setFrom(par("from").stringValue());
