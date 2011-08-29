@@ -126,9 +126,9 @@ void FileInputNode::initialize()
 
 	seqcounter++;
 	//Construir o primeiro pacote e enviar
-	first_pkt->setName("File message, seq: 0");
-	first_pkt->setFrom("T2");
-	first_pkt->setTo("R2");
+	first_pkt->setName("File message, seq: 1");
+	first_pkt->setFrom(par("from").stringValue());
+	first_pkt->setTo(par("to").stringValue());
 	first_pkt->setSeqCount(1);
 	first_pkt->setByteLength(parsed_line.byteLength);
 	send(first_pkt,"out1");
@@ -143,8 +143,8 @@ void FileInputNode::initialize()
 		seqcounter++;
 		QoSMessage * next_pkt = new QoSMessage();
 		next_pkt->setName("File message, seq: 2");
-		next_pkt->setFrom("T2");
-		next_pkt->setTo("R2");
+		next_pkt->setFrom(par("from").stringValue());
+		next_pkt->setTo(par("to").stringValue());
 		next_pkt->setSeqCount(seqcounter);
 		next_pkt->setByteLength(next_packet_timestamp.byteLength);
 
@@ -169,8 +169,8 @@ void FileInputNode::handleMessage(cMessage *msg)
 		messageName << "File message, seq: " << seqcounter;
 
 		next_pkt->setName(messageName.str().c_str());
-		next_pkt->setFrom("T2");
-		next_pkt->setTo("R2");
+		next_pkt->setFrom(par("from").stringValue());
+		next_pkt->setTo(par("to").stringValue());
 		next_pkt->setSeqCount(seqcounter);
 		next_pkt->setByteLength(next_packet_timestamp.byteLength);
 
