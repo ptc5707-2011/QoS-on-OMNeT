@@ -28,6 +28,8 @@ class Receiver : public cSimpleModule
 	private:
 
 	unsigned long next_seq;
+
+	simsignal_t sentTimeSignalID;
 	simsignal_t lengthSignalID;
 	simsignal_t seqSignalID;
 	simsignal_t delaySignalID;

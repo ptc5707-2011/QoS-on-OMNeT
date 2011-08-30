@@ -22,6 +22,7 @@ void Receiver::initialize()
 
 	next_seq = 1;
     //Registrar sinais
+	sentTimeSignalID = registerSignal("sent_timestamp");
 	lengthSignalID = registerSignal("received_packet_length");
 	seqSignalID = registerSignal("received_packet_seq");
 	delaySignalID = registerSignal("packet_delay");
@@ -38,6 +39,7 @@ void Receiver::handleMessage(cMessage *msg)
 	if(!(next_seq == pkt->getSeqCount())) {
 		for(unsigned long i = next_seq; i < pkt->getSeqCount(); i++) {
 			EV << this->getName() << " detectou perda do pacote '" << msg->getName() <<"\n";
+			emit(sentTimeSignalID, 0);
 			emit(delaySignalID, 0);
 			emit(lengthSignalID, 0);
 			emit(seqSignalID, i);
@@ -45,6 +47,7 @@ void Receiver::handleMessage(cMessage *msg)
 		}
 	}
 
+	emit(sentTimeSignalID, pkt->getCreationTime());
 	emit(delaySignalID, (pkt->getArrivalTime()-pkt->getCreationTime()));
 	emit(lengthSignalID, (unsigned long)pkt->getByteLength());
 	emit(seqSignalID, (unsigned long)pkt->getSeqCount());
