@@ -24,12 +24,13 @@ simple FileInputNode like SourceNode
         string from;
         string to;
         string filename;
-        
+
         //Estatísticas
-        @statistic[sent_packet_length] (title="File Input Sent Packet Length";record=vector);
-        @statistic[sent_packet_seq] (title="File Input Sent Packet Sequence Number";record=vector);
-        
+        @statistic[sent_packet_length](title="File Input Sent Packet Length"; record=vector);
+        @statistic[sent_packet_seq](title="File Input Sent Packet Sequence Number"; record=vector);
+
+        @display("i=msg/file");
     gates:
         output out1;
-            
+
 }

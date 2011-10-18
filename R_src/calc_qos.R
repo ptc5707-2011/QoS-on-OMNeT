@@ -11,11 +11,11 @@ rm(list=ls(all=T))
 #ATENÇÃO!!!!!: Todos os caminhos de arquivos a seguir devem ser mudados para corresponder com o nome dos arquivos que você exportou do OMNeT. Aqui, por exemplo, eu escolhi chamar a saída da simulação CBR-File, do delay do nó R1 como CBR-File-5s-1.csv, da flag de received_or_dropped do nó R1 como CBR-File-5s-2.csv, assim por diante. 
 # NÃO ESPERE QUE O SCRIPT VÁ FUNCIONAR SE VOCÊ NÃO ADEQUAR O NOME DOS ARQUIVOS PARA O SEU CASO.
 
-sent_timestamp_filename =		"./R_input/CBR-File-R1-5s-1.csv"
-delay_filename =				"./R_input/CBR-File-R1-5s-2.csv"
-length_filename =				"./R_input/CBR-File-R1-5s-3.csv"
-seq_filename =					"./R_input/CBR-File-R1-5s-4.csv"
-received_or_dropped_filename =	"./R_input/CBR-File-R1-5s-5.csv"
+sent_timestamp_filename =		"./R_input/testando-1.csv"
+delay_filename =				"./R_input/testando-2.csv"
+length_filename =				"./R_input/testando-3.csv"
+seq_filename =					"./R_input/testando-4.csv"
+received_or_dropped_filename =	"./R_input/testando-5.csv"
 
 ###########################
 ###########################

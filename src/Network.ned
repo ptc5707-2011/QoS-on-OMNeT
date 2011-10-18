@@ -26,6 +26,8 @@ network Network
         @display("bgb=901,567");
         double link_delay @unit(s);
         double link_datarate @unit(bps);
+        double link_ber = default(0.0);
+        double link_per = default(0.0);
 
         string applicationNodeType;
         string interferenceNodeType;
@@ -63,13 +65,57 @@ network Network
         ROU2.out++ --> IdealChannel --> R2.in1;
         T1.out1 --> IdealChannel --> ROU1.in++;
         T2.out1 --> IdealChannel --> ROU1.in++;
-        ROU1.out++ --> DatarateChannel {  datarate = link_datarate; delay = link_delay; } --> ROU2.in++;
+        ROU1.out++ --> DatarateChannel {  datarate = link_datarate; delay = link_delay; per = link_per; ber = link_ber; } --> ROU2.in++;
 }
-//
-// TODO documentation
-//
-// @author hugo
-//
+
+network ControlledNetwork
+{
+    parameters:
+        @display("bgb=901,567");
+        double link_delay @unit(s);
+        double link_datarate @unit(bps);
+        double link_ber = default(0.0);
+        double link_per = default(0.0);
+
+        string applicationNodeType;
+        string interferenceNodeType;
+
+    submodules:
+        ROU1: ControlledRouter {
+            @display("p=179,216");
+            @statistic[sent_seq_R2](title="Test Seq R2"; record=vector);
+            @statistic[sent_seq_R1](title="Test Seq R1"; record=vector);
+            @statistic[sent_len_R2](title="Test Len R2"; record=vector);
+            @statistic[sent_len_R1](title="Test Len R1"; record=vector);
+        }
+        ROU2: ControlledRouter {
+            @display("p=533,216");
+        }
+        T1: <applicationNodeType> like SourceNode {
+            @display("p=72,65;i=device/pc3");
+            from = "T1";
+            to = "R1";
+        }
+        T2: <interferenceNodeType> like SourceNode {
+            @display("p=72,365;i=block/network");
+            from = "T2";
+            to = "R2";
+        }
+        R1: Receiver {
+            @display("p=639,88;i=device/laptop");
+        }
+        R2: Receiver {
+            @display("p=639,365;i=block/network2");
+        }
+    connections:
+
+        ROU2.out++ --> IdealChannel --> R1.in1;
+        ROU2.out++ --> IdealChannel --> R2.in1;
+        T1.out1 --> IdealChannel --> ROU1.in++;
+        T2.out1 --> IdealChannel --> ROU1.in++;
+        ROU1.out++ --> DatarateChannel {  datarate = link_datarate; delay = link_delay; per = link_per; ber = link_ber; } --> ROU2.in++;
+}
+
 network FileInputTest
 {
     parameters:
@@ -209,12 +255,10 @@ network FileRouterTest
 //
 network FileBufferedRouterTest
 {
-    
-    
     parameters:
         double link_delay @unit(s);
         double link_datarate @unit(bps);
-        
+
         @display("bgb=470,265");
     submodules:
         FBROUTER2: FileBufferedRouter {
@@ -245,9 +289,36 @@ network FileBufferedRouterTest
         CBR1.out1 --> FBROUTER1.in++;
         CBR2.out1 --> FBROUTER1.in++;
         CBR3.out1 --> FBROUTER2.in++;
-        FBROUTER1.out++ --> DatarateChannel { datarate = link_datarate; delay = link_delay; } --> FBROUTER3.in++;
-        FBROUTER2.out++ --> DatarateChannel { datarate = link_datarate; delay = link_delay; } --> FBROUTER3.in++;
-        FBROUTER3.out++ --> DatarateChannel { datarate = link_datarate; delay = link_delay; } --> R1.in1;
-        FBROUTER3.out++ --> DatarateChannel { datarate = link_datarate; delay = link_delay; } --> R2.in1;
+        FBROUTER1.out++ --> DatarateChannel {  datarate = link_datarate; delay = link_delay; } --> FBROUTER3.in++;
+        FBROUTER2.out++ --> DatarateChannel {  datarate = link_datarate; delay = link_delay; } --> FBROUTER3.in++;
+        FBROUTER3.out++ --> DatarateChannel {  datarate = link_datarate; delay = link_delay; } --> R1.in1;
+        FBROUTER3.out++ --> DatarateChannel {  datarate = link_datarate; delay = link_delay; } --> R2.in1;
+}
+
+//
+// TODO documentation
+//
+// @author hugo
+//
+network ControlledRouterTest
+{
+    parameters:
+        @display("bgb=470,191");
+        double link_delay @unit(s);
+        double link_datarate @unit(bps);
+
+    submodules:
+        receiver: Receiver {
+            @display("p=398,110");
+        }
+        fileInputNode: FileInputNode {
+            @display("p=76,110");
+        }
+        controlledRouter: ControlledRouter {
+            @display("p=236,110");
+        }
+    connections:
+        fileInputNode.out1 --> controlledRouter.in++;
+        controlledRouter.out++ --> DatarateChannel {  datarate = link_datarate; delay = link_delay; } --> receiver.in1;
 }
 

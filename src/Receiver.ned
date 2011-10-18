@@ -20,15 +20,15 @@ package qos;
 //
 simple Receiver
 {
-    
     parameters:
         //Estatísticas
-        @statistic[received_packet_length] (title="Received packet length";record=vector);
-        @statistic[received_packet_seq] (title="Received packet sequence number";record=vector);
-        @statistic[packet_delay] (title="Received packet delay";record=vector);
-        @statistic[received_or_dropped] (title="Packet received(1) or dropped(0)";record=vector);
-        @statistic[sent_timestamp] (title="Creation time of received message";record=vector);
-         
+        @statistic[received_packet_length](title="Received packet length"; record=vector);
+        @statistic[received_packet_seq](title="Received packet sequence number"; record=vector);
+        @statistic[packet_delay](title="Received packet delay"; record=vector);
+        @statistic[received_or_dropped](title="Packet received(1) or dropped(0)"; record=vector);
+        @statistic[sent_timestamp](title="Creation time of received message"; record=vector);
+
+        @display("i=device/pc2");
     gates:
         input in1;
 }

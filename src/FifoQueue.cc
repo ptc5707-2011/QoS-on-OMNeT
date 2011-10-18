@@ -17,6 +17,8 @@
 
 Define_Module(FifoQueue);
 
+
+
 void FifoQueue::initialize()
 {
     endedTransmission = new cMessage("Ended Transmission");
@@ -27,14 +29,14 @@ void FifoQueue::initialize()
 
 	outGate = gate("out");
 
-	//O módulo não está dentro de um módulo composto
+	//Se o módulo não está dentro de um módulo composto
 	if(outGate->getChannel()) {
 		if(outGate->getChannel()->isTransmissionChannel()) {
 			outChannel = outGate->getTransmissionChannel();
 		} else {
 			outChannel = outGate->getChannel();
 		}
-	} else if(outGate->getNextGate()->getChannel()) { //o módulo está dentro de um módulo composto
+	} else if(outGate->getNextGate()->getChannel()) { //se o módulo está dentro de um módulo composto
 		if(outGate->getNextGate()->getChannel()->isTransmissionChannel()){
 			outChannel = outGate->getNextGate()->getTransmissionChannel();
 		} else {
@@ -53,6 +55,41 @@ void FifoQueue::initialize()
 	busySignal = registerSignal("busy");
 	packetsInQueueSignal = registerSignal("packetsInQueue");
 	bytesInQueueSignal = registerSignal("bytesInQueue");
+	queueSizeSignal = registerSignal("queueSize");
+
+}
+
+void FifoQueue::controlBuffer(QueueControllerMessage *ctrlMsg) {
+
+	double forecasted_load = ctrlMsg->getLoad();
+	double window_time = ctrlMsg->getWindowTime();
+
+	EV << "incoming load: " << forecasted_load << ", datarate: " << outChannel->getNominalDatarate();
+
+	double datarate = outChannel->getNominalDatarate();
+
+
+	long recommendation;
+	if(forecasted_load > datarate) {
+		recommendation = round((forecasted_load-datarate)*window_time);
+	} else {
+		recommendation = -round(datarate*window_time);
+	}
+
+	EV << "recommendation: " << recommendation;
+
+	if(recommendation > 0)  { //Aumentar o tamanho do buffer
+		queueBufferLength += recommendation;
+	} else { //Diminuir o tamanho do buffer
+
+		if(queueBufferLength +recommendation > usedQueueBufferLength) { //Se o novo valor do buffer for maior que o buffer utilizado no momento
+			queueBufferLength += recommendation;
+		} else {
+			queueBufferLength = usedQueueBufferLength;
+		}
+	}
+
+	delete ctrlMsg;
 
 }
 
@@ -68,6 +105,7 @@ void FifoQueue::handleMessage(cMessage *msg)
 			busy = false;
 
 			emit(bytesInQueueSignal, 0);
+			emit(queueSizeSignal, queueBufferLength);
 			emit(packetsInQueueSignal, 0);
 			emit(busySignal, 0);
 
@@ -78,6 +116,7 @@ void FifoQueue::handleMessage(cMessage *msg)
 			busy = true;
 
 			emit(bytesInQueueSignal, usedQueueBufferLength);
+			emit(queueSizeSignal, queueBufferLength);
 			emit(packetsInQueueSignal, queue.length());
 			emit(busySignal, 1);
 
@@ -88,38 +127,44 @@ void FifoQueue::handleMessage(cMessage *msg)
 
 		}
 
-	} else { //chegou um pacote
+	} else { //chegou um pacote ou um comando
 
-		pkt = (QoSMessage*)msg;
+		if(msg->arrivedOn("in")) { //Se chegou um pacote
+			pkt = (QoSMessage*)msg;
 
-		if(!busy) {
+			if(!busy) {
 
-			busy = true;
+				busy = true;
 
-			emit(bytesInQueueSignal, 0);
-			emit(packetsInQueueSignal, 0);
-			emit(busySignal, 1);
+				emit(bytesInQueueSignal, 0);
+				emit(queueSizeSignal, queueBufferLength);
+				emit(packetsInQueueSignal, 0);
+				emit(busySignal, 1);
 
-			simtime_t transmission_time = outChannel->calculateDuration(pkt);
-			messageBeingTransmitted = pkt;
-			scheduleAt(simTime()+transmission_time, endedTransmission);
-			send(pkt, outGate);
+				simtime_t transmission_time = outChannel->calculateDuration(pkt);
+				messageBeingTransmitted = pkt;
+				scheduleAt(simTime()+transmission_time, endedTransmission);
+				send(pkt, outGate);
 
-		} else {
-
-
-			if(pkt->getByteLength() + usedQueueBufferLength > queueBufferLength) {
-				emit(droppedPacketLengthSignal, (unsigned long) pkt->getByteLength());
-				emit(droppedPacketSeqSignal, pkt->getSeqCount());
-				delete pkt;
 			} else {
-				usedQueueBufferLength += pkt->getByteLength();
-				queue.insert(msg);
 
-				emit(bytesInQueueSignal, usedQueueBufferLength);
-				emit(packetsInQueueSignal, queue.length());
+				if(pkt->getByteLength() + usedQueueBufferLength > queueBufferLength) {
+					emit(droppedPacketLengthSignal, (unsigned long) pkt->getByteLength());
+					emit(droppedPacketSeqSignal, pkt->getSeqCount());
+					delete pkt;
+				} else {
+					usedQueueBufferLength += pkt->getByteLength();
+					queue.insert(msg);
+
+					emit(bytesInQueueSignal, usedQueueBufferLength);
+					emit(queueSizeSignal, queueBufferLength);
+					emit(packetsInQueueSignal, queue.length());
+				}
+
 			}
 
+		} else { //Se chegou um comando
+			controlBuffer((QueueControllerMessage *) msg);
 		}
 
 	}

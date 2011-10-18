@@ -95,7 +95,6 @@ cGate* FileRouter::getGateFromTable(QoSMessage *pkt) {
 void FileRouter::initialize()
 {
 	fillTableFromFile();
-	droppedSeqSignalID = registerSignal("dropped_no_route_seq");
 	droppedLenSignalID = registerSignal("dropped_no_route_len");
 
 }
@@ -112,12 +111,13 @@ void FileRouter::handleMessage(cMessage *msg)
 
 	EV << this->getFullPath() << " recebeu '" << msg->getName() << "\n";
 
+
+
     if(outGate) {
     	EV << this->getFullPath() << " encaminhando mensagem por: " << outGate->getFullPath() << "\n";
     	send(pkt, outGate);
     } else {
     	EV << this->getFullPath() << " descartando mensagem pois não foi encontrada uma rota para " << pkt->getTo() << "\n";
-    	emit(droppedSeqSignalID, pkt->getSeqCount());
     	emit(droppedLenSignalID, (unsigned long)pkt->getByteLength());
     	delete pkt;
     }

@@ -21,6 +21,7 @@ moduleinterface SourceNode
         string from;
         string to;
 
+        @display("i=block/source");
     gates:
-        output out1;   
+        output out1;
 }

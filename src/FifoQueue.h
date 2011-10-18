@@ -18,6 +18,7 @@
 
 #include <omnetpp.h>
 #include "QoSMessage_m.h"
+#include "QueueControllerMessage_m.h"
 
 /**
  * TODO - Generated class
@@ -34,18 +35,21 @@ class FifoQueue : public cSimpleModule
 
 	cQueue queue;
 	bool busy;
-	unsigned long queueBufferLength;
-	unsigned long usedQueueBufferLength;
+	long queueBufferLength;
+	long usedQueueBufferLength;
 
 	simsignal_t droppedPacketLengthSignal;
 	simsignal_t droppedPacketSeqSignal;
 	simsignal_t busySignal;
 	simsignal_t packetsInQueueSignal;
 	simsignal_t bytesInQueueSignal;
+	simsignal_t queueSizeSignal;
 
     virtual void initialize();
     virtual ~FifoQueue();
     virtual void handleMessage(cMessage *msg);
+    virtual void controlBuffer(QueueControllerMessage *ctrlMsg);
+
 };
 
 #endif

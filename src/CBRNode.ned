@@ -25,11 +25,12 @@ simple CBRNode like SourceNode
         string to;
         int bytesPerPacket @unit(B);
         double timeBetweenPackets @unit(s);
-        
-        //Estatísticas
-        @statistic[sent_packet_length] (title="CBR Sent Packet Length";record=vector);
-        @statistic[sent_packet_seq] (title="CBR Sent Packet Sequence Number";record=vector);
 
+        //Estatísticas
+        @statistic[sent_packet_length](title="CBR Sent Packet Length"; record=vector);
+        @statistic[sent_packet_seq](title="CBR Sent Packet Sequence Number"; record=vector);
+
+        @display("i=device/pc2");
     gates:
-        output out1;   
+        output out1;
 }
